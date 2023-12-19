@@ -2,9 +2,10 @@ const express = require("express");
 const http = require("http");
 const path = require("path");
 const mongoose = require("mongoose");
+const createErrors = require("http-errors");
 const { AllRoutes } = require("./routes/router");
 const morgan = require("morgan");
-module.exports= class Application {
+module.exports = class Application {
   #app = express();
   #PORT;
   #DB_URI;
@@ -19,7 +20,7 @@ module.exports= class Application {
   }
 
   configApplication() {
-    this.#app.use(morgan('dev'));
+    this.#app.use(morgan("dev"));
     this.#app.use(express.json());
     this.#app.use(express.urlencoded({ extended: true }));
     this.#app.use(express.static(path.join(__dirname + ".." + "public")));
@@ -35,36 +36,36 @@ module.exports= class Application {
       .then(() => console.log("Connected to Db!"))
       .catch((err) => console.log("faild to connected Db!"));
 
-    mongoose.connection.on('connected',()=>{
-      console.log('Mongoose connected to Db!');
+    mongoose.connection.on("connected", () => {
+      console.log("Mongoose connected to Db!");
     });
-    mongoose.connection.on('disconnected',()=>{
-      console.log('Mongoose disConnected to Db!');
-    })
+    mongoose.connection.on("disconnected", () => {
+      console.log("Mongoose disConnected to Db!");
+    });
 
-    process.on('SIGINT',async()=>{
+    process.on("SIGINT", async () => {
       await mongoose.connection.close();
       process.exit(0);
-    })
+    });
   }
   createRoutes() {
     this.#app.use(AllRoutes);
   }
   errorHandling() {
     this.#app.use((req, res, next) => {
-      return res.status(404).json({
-        statusCode: 404,
-        message: "آدرس مورد نطر یافت نشد!",
-      });
+      next(createErrors.NotFound("آدرس مورد نطر یافت نشد!"));
     });
 
-    this.#app.use((err,req,res,next)=>{
-        const statusCode=err.status ?? 500;
-        const message=err.message ?? 'InternalServerError!';
-        return res.status(statusCode).json({
-            statusCode,
-            message
-        })
-    })
+    this.#app.use((err, req, res, next) => {
+      const serverError=createErrors.InternalServerError()
+      const statusCode = err.status ?? serverError.status;
+      const message = err.message ?? serverError.message
+      return res.status(statusCode).json({
+        errors: {
+          statusCode,
+          message,
+        },
+      });
+    });
   }
-}
+};
