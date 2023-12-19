@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const path = require("path");
 const mongoose = require("mongoose");
+const { AllRoutes } = require("./routes/router");
 module.exports= class Application {
   #app = express();
   #PORT;
@@ -32,7 +33,9 @@ module.exports= class Application {
       .then(() => console.log("Connected to Db!"))
       .catch((err) => console.log("faild to connected Db!"));
   }
-  createRoutes() {}
+  createRoutes() {
+    this.#app.use(AllRoutes);
+  }
   errorHandling() {
     this.#app.use((req, res, next) => {
       return res.status(404).json({
