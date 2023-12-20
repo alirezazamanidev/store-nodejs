@@ -1,13 +1,13 @@
 const { EXPIRES_IN, USER_ROLE } = require("../../../../utils/constans");
-const { RandomNumberGenerator } = require("../../../../utils/functions");
-const authSchema = require("../../../validators/user/auth.schema");
+const { RandomNumberGenerator, SignAccessToken } = require("../../../../utils/functions");
+const {getOtpSchema,checkOtpSchema}=require('./../../../validators/user/auth.schema');
 const { UserModel } = require("./../../../../models/users");
 const createErrors = require("http-errors");
 const Controller=require('./../../controller');
 class UserAuthController extends Controller {
-  async login(req, res, next) {
+  async getOtp(req, res, next) {
     try {
-      await authSchema.validateAsync(req.body);
+      await getOtpSchema.validateAsync(req.body);
       const { phone } = req.body;
       const code = RandomNumberGenerator();
       const result=await this.saveUser(phone,code);
@@ -21,7 +21,28 @@ class UserAuthController extends Controller {
     }
     });
     } catch (error) {
-      next(createErrors.BadRequest(error.message));
+      next(error);
+    }
+  }
+  async checkOtp(req,res,next){
+    try{
+        await checkOtpSchema.validateAsync(req.body);
+        const {phone,code}=req.body;
+        const user=await UserModel.findOne({phone});
+        if(!user) throw createErrors.NotFound('کاربری یافت نشد!')
+        if(user.otp.code!=code) throw createErrors.Unauthorized('کد ارسال شده  صحیح نمی باشد');
+        const now= Date.now();
+        if(+user.otp.expiresIn < now) throw createErrors.Unauthorized('کد ارسال شده منقضی شده است!');
+        const accessToken=await SignAccessToken(user._id); 
+        return res.json({
+            data:{
+                accessToken
+            }
+
+        })
+
+    }catch(err){
+        next(err);
     }
   }
   async saveUser(phone,code) {
@@ -51,7 +72,7 @@ class UserAuthController extends Controller {
         delete objectData[key];
     });
     const updateResult = await UserModel.updateOne(
-      { mobile },
+      { phone },
       { $set: objectData }
     );
     return !!updateResult.modifiedCount;
