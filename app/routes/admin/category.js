@@ -2,17 +2,11 @@ const { CategoryController } = require("../../http/controllers/admin/catrgory.co
 
 const router = require("express").Router();
 
-
-/**
- * @swagger
- * tags:
- *  name: Admin-Panel
- */
 /**
  * @swagger
  * /admin/category/create:
  *  post:
- *   tags: [Admin-Panel]
+ *   tags: [Category(AdminPanel)]
  *   summary: Add category
  *   parameters:
  *      -  in: formData
@@ -35,7 +29,7 @@ router.post('/create',CategoryController.addCategory);
  * @swagger
  * /admin/category/parents:
  *  get:
- *    tags: [Admin-Panel]
+ *    tags: [Category(AdminPanel)]
  *    summary: Get All parents of category  or category head
  *    responses:
  *        200:
@@ -47,7 +41,7 @@ router.get('/parents',CategoryController.getAllParents);
  * @swagger
  * /admin/category/childern/{parent}:
  *  get:
- *    tags: [Admin-Panel]
+ *    tags: [Category(AdminPanel)]
  *    summary: Get All childern of category  or category head
  *    parameters:
  *        -  in: path
@@ -64,7 +58,7 @@ router.get('/childern/:parent',CategoryController.getChildParent);
  * @swagger
  * /admin/category/all:
  *  get:
- *    tags: [Admin-Panel]
+ *    tags: [Category(AdminPanel)]
  *    summary: Get All Categories
  *    responses:
  *        200:
@@ -74,9 +68,57 @@ router.get('/childern/:parent',CategoryController.getChildParent);
 router.get('/all',CategoryController.getAllCategory);
 /**
  * @swagger
+ * /admin/category/list-of-all:
+ *  get:
+ *    tags: [Category(AdminPanel)]
+ *    summary: Get All Categories without populate
+ *    responses:
+ *        200:
+ *           description: sucucess
+ */
+
+router.get('/list-of-all',CategoryController.getAllCategoryWithoutPopulate);
+/**
+ * @swagger
+ * /admin/category/{id}:
+ *  get:
+ *    tags: [Category(AdminPanel)]
+ *    summary: Get one category with id of params
+ *    parameters:
+ *        -  in: path
+ *           name: id
+ *           type: string
+ *           required: true
+ *    responses:
+ *        200:
+ *           description: sucucess
+ */
+router.get('/:id',CategoryController.getCategorybyId);
+/**
+ * @swagger
+ * /admin/category/update/{id}:
+ *  patch:
+ *    tags: [Category(AdminPanel)]
+ *    summary: update one category with id of params
+ *    parameters:
+ *        -  in: path
+ *           name: id
+ *           type: string
+ *           required: true
+ *        -  in: formData
+ *           name: title
+ *           type: string
+ *           required: true
+ *    responses:
+ *        200:
+ *           description: sucucess
+ */
+router.patch('/update/:id',CategoryController.editCategory);
+/**
+ * @swagger
  * /admin/category/remove/{id}:
  *  delete:
- *    tags: [Admin-Panel]
+ *    tags: [Category(AdminPanel)]
  *    summary: Delete one category with id of params
  *    parameters:
  *        -  in: path
