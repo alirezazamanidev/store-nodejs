@@ -20,6 +20,20 @@ class CategoryController extends Controller {
             next(error)
         }
     }
+    async getAllParents(req,res,next){
+        try {
+            const parents=await CategoryModel.find({parent:undefined});
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    parents
+                }
+            })
+            
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports={

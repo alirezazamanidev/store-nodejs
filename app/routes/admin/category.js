@@ -31,6 +31,18 @@ const router = require("express").Router();
  */
 
 router.post('/create',CategoryController.addCategory);
+/**
+ * @swagger
+ * /admin/category/parents:
+ *  get:
+ *    tags: [Admin-Panel]
+ *    summary: Get All parents of category  or category head
+ *    responses:
+ *        200:
+ *           description: sucucess
+ */
+
+router.get('/parents',CategoryController.getAllParents);
 module.exports = {
   CategoryRouter: router,
 };
