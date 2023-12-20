@@ -9,7 +9,7 @@ const Schema=new mongoose.Schema({
     password:{type:String},
     otp:{type:Object,default:{
         code:0,
-        expires:0
+        expiresIn:0
     }},
     bills:{type:[],default:[]},
     diacount:{type:Number,default:0},

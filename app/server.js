@@ -4,6 +4,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const createErrors = require("http-errors");
 const { AllRoutes } = require("./routes/router");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 const morgan = require("morgan");
 module.exports = class Application {
   #app = express();
@@ -24,6 +26,24 @@ module.exports = class Application {
     this.#app.use(express.json());
     this.#app.use(express.urlencoded({ extended: true }));
     this.#app.use(express.static(path.join(__dirname + ".." + "public")));
+    this.#app.use(
+      "/api-doc",
+      swaggerUi.serve,
+      swaggerUi.setup(
+        swaggerJsDoc({
+          swaggerDefinition: {
+            info: {
+              title: "Store Api Document",
+              description: "This store Api document. ",
+              version: "2.0.0",
+            },
+          },
+
+
+          apis: [ "./app/routes/**/*.js"],
+        })
+      )
+    );
   }
   createServer() {
     http.createServer(this.#app).listen(this.#PORT, () => {
@@ -57,9 +77,9 @@ module.exports = class Application {
     });
 
     this.#app.use((err, req, res, next) => {
-      const serverError=createErrors.InternalServerError()
+      const serverError = createErrors.InternalServerError();
       const statusCode = err.status ?? serverError.status;
-      const message = err.message ?? serverError.message
+      const message = err.message ?? serverError.message;
       return res.status(statusCode).json({
         errors: {
           statusCode,
