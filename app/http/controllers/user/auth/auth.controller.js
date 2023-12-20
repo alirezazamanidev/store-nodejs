@@ -1,4 +1,4 @@
-const { EXPIRES_IN, USER_ROLE } = require("../../../../utils/constans");
+const { ROLSE } = require("../../../../utils/constans");
 const { RandomNumberGenerator, SignAccessToken, VerifyRefreshToken, SignRefreshToken } = require("../../../../utils/functions");
 const {getOtpSchema,checkOtpSchema}=require('./../../../validators/user/auth.schema');
 const { UserModel } = require("./../../../../models/users");
@@ -62,7 +62,7 @@ class UserAuthController extends Controller {
     return await (UserModel.create({
         phone,
         otp,
-        Roles:[USER_ROLE]
+        Roles:[ROLSE.USER]
     }))
   }
 
