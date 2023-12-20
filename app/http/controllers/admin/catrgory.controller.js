@@ -20,7 +20,7 @@ class CategoryController extends Controller {
             next(error)
         }
     }
-    async getAllParents(req,res,next){
+    async getAllParents(req,res,next){ 
         try {
             const parents=await CategoryModel.find({parent:undefined});
             return res.status(200).json({
@@ -32,6 +32,54 @@ class CategoryController extends Controller {
             
         } catch (error) {
             next(error);
+        }
+    }
+    async getChildParent(req,res,next){
+        try {
+            const {parent}=req.params;
+            const childern=await CategoryModel.find({parent});
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    childern
+                }
+            })
+            
+        } catch (error) {
+            next(err);
+        }
+    }
+    async getAllCategory(req,res,next){
+        try{
+            const categories=await CategoryModel.aggregate([{
+                $lookup:{
+                    from:'categories',
+                    localField:'_id',
+                    foreignField:'parent',
+                    as:'childern'
+                    
+                },
+                
+            },{
+                $project:{
+                    __v:0,
+                    'childern.__v':0,
+                    'childern.parent':0,
+                }
+            }
+            
+        
+        ]);
+
+            return res.status(200).json({
+                data:{
+                    satatusCode:200,
+                    categories
+                }
+            })
+
+        }catch(err){
+            next(err); 
         }
     }
 }
