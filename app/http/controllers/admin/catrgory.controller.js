@@ -82,6 +82,28 @@ class CategoryController extends Controller {
             next(err); 
         }
     }
+    async removeCategory(req,res,next){
+        try {
+            const {id}=req.params;
+            const category=await this.checkExistCategory(id);
+            const deleteResult=await CategoryModel.deleteOne({_id:category.id});
+            if(deleteResult.deletedCount==0) throw createHttpError.InternalServerError();
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    message:'Category has been deleted!'
+                }
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async checkExistCategory(id){
+        const category=await CategoryModel.findById(id);
+        if(!category) throw createHttpError.NotFound('Category not found!');
+        return category;
+    }
 }
 
 module.exports={

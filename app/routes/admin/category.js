@@ -72,7 +72,23 @@ router.get('/childern/:parent',CategoryController.getChildParent);
  */
 
 router.get('/all',CategoryController.getAllCategory);
+/**
+ * @swagger
+ * /admin/category/remove/{id}:
+ *  delete:
+ *    tags: [Admin-Panel]
+ *    summary: Delete one category with id of params
+ *    parameters:
+ *        -  in: path
+ *           name: id
+ *           type: string
+ *           required: true
+ *    responses:
+ *        200:
+ *           description: sucucess
+ */
 
+router.delete('/remove/:id',CategoryController.removeCategory);
 
 module.exports = {
   CategoryRouter: router,
