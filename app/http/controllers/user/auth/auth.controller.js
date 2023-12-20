@@ -1,5 +1,5 @@
 const { EXPIRES_IN, USER_ROLE } = require("../../../../utils/constans");
-const { RandomNumberGenerator, SignAccessToken } = require("../../../../utils/functions");
+const { RandomNumberGenerator, SignAccessToken, VerifyRefreshToken, SignRefreshToken } = require("../../../../utils/functions");
 const {getOtpSchema,checkOtpSchema}=require('./../../../validators/user/auth.schema');
 const { UserModel } = require("./../../../../models/users");
 const createErrors = require("http-errors");
@@ -34,9 +34,12 @@ class UserAuthController extends Controller {
         const now= Date.now();
         if(+user.otp.expiresIn < now) throw createErrors.Unauthorized('کد ارسال شده منقضی شده است!');
         const accessToken=await SignAccessToken(user._id); 
+        const refreshToken=await SignRefreshToken(user.id);
+
         return res.json({
             data:{
-                accessToken
+                accessToken,
+                refreshToken
             }
 
         })
@@ -61,6 +64,25 @@ class UserAuthController extends Controller {
         otp,
         Roles:[USER_ROLE]
     }))
+  }
+
+  async refreshToken(req,res,next){
+    try {
+        const {refreshToken}=req.body;
+        const phone=await VerifyRefreshToken(refreshToken);
+        const user=await UserModel.findOne({phone});
+        const accessToken=await SignAccessToken(user?.id);
+        const newRefreshToken=await SignRefreshToken(user.id);
+        return res.json({
+            data:{
+                accessToken,
+                newRefreshToken
+            }
+        })
+        
+    } catch (error) {
+        next(error)
+    }
   }
   async checkExistUser(phone) {
     const user = await UserModel.findOne({ phone });
