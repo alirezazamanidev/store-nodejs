@@ -19,6 +19,7 @@ module.exports = class Application {
     this.connectToMongoDb();
     this.createRoutes();
     this.errorHandling();
+    this.Init_redis();
   }
 
   configApplication() {
@@ -50,6 +51,7 @@ module.exports = class Application {
       console.log(`run > http://localhost:${this.#PORT}`);
     });
   }
+
   connectToMongoDb() {
     mongoose
       .connect(this.#DB_URI)
@@ -67,6 +69,9 @@ module.exports = class Application {
       await mongoose.connection.close();
       process.exit(0);
     });
+  }
+  Init_redis(){
+    require('./utils/init_redis');
   }
   createRoutes() {
     this.#app.use(AllRoutes);

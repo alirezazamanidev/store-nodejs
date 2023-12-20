@@ -52,7 +52,7 @@ class UserAuthController extends Controller {
     const result = await this.checkExistUser(phone);
     let  otp={
         code,
-        expiresIn:EXPIRES_IN,
+        expiresIn:(new Date().getTime() + 120000),
         
     }
     if (result) {
