@@ -33,16 +33,17 @@ module.exports = class Application {
       swaggerUi.setup(
         swaggerJsDoc({
           swaggerDefinition: {
+            openapi:'3.0.0',
             info: {
               title: "Store Api Document",
               description: "This store Api document. ",
               version: "2.0.0",
-            },
+            }
           },
 
-
           apis: [ "./app/routes/**/*.js"],
-        })
+        }),
+        {explorer:true}
       )
     );
   }
