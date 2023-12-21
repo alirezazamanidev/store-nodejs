@@ -9,6 +9,11 @@ const router = require("express").Router();
  *   tags: [Category(AdminPanel)]
  *   summary: Add category
  *   parameters:
+ *      -  in: header
+ *         example: Bearer Token...
+ *         name: access_token
+ *         type: string
+ *         required: true
  *      -  in: formData
  *         type: string
  *         name: title
@@ -29,8 +34,15 @@ router.post('/create',CategoryController.addCategory);
  * @swagger
  * /admin/category/parents:
  *  get:
+ * 
  *    tags: [Category(AdminPanel)]
  *    summary: Get All parents of category  or category head
+ *    parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
  *    responses:
  *        200:
  *           description: sucucess
@@ -44,6 +56,11 @@ router.get('/parents',CategoryController.getAllParents);
  *    tags: [Category(AdminPanel)]
  *    summary: Get All childern of category  or category head
  *    parameters:
+ *        -  in: header
+ *           example: Bearer Token...
+ *           name: access_token
+ *           type: string
+ *           required: true
  *        -  in: path
  *           name: parent
  *           type: string
@@ -60,6 +77,12 @@ router.get('/childern/:parent',CategoryController.getChildParent);
  *  get:
  *    tags: [Category(AdminPanel)]
  *    summary: Get All Categories
+ *    parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
  *    responses:
  *        200:
  *           description: sucucess
@@ -72,6 +95,12 @@ router.get('/all',CategoryController.getAllCategory);
  *  get:
  *    tags: [Category(AdminPanel)]
  *    summary: Get All Categories without populate
+ *    parameters:
+ *        -  in: header
+ *           example: Bearer Token...
+ *           name: access_token
+ *           type: string
+ *           required: true
  *    responses:
  *        200:
  *           description: sucucess
@@ -85,6 +114,11 @@ router.get('/list-of-all',CategoryController.getAllCategoryWithoutPopulate);
  *    tags: [Category(AdminPanel)]
  *    summary: Get one category with id of params
  *    parameters:
+ *        -  in: header
+ *           example: Bearer Token...
+ *           name: access_token
+ *           type: string
+ *           required: true
  *        -  in: path
  *           name: id
  *           type: string
@@ -101,6 +135,11 @@ router.get('/:id',CategoryController.getCategorybyId);
  *    tags: [Category(AdminPanel)]
  *    summary: update one category with id of params
  *    parameters:
+ *        -  in: header
+ *           example: Bearer Token...
+ *           name: access_token
+ *           type: string
+ *           required: true
  *        -  in: path
  *           name: id
  *           type: string
@@ -121,6 +160,11 @@ router.patch('/update/:id',CategoryController.editCategory);
  *    tags: [Category(AdminPanel)]
  *    summary: Delete one category with id of params
  *    parameters:
+ *        -  in: header
+ *           example: Bearer Token...
+ *           name: access_token
+ *           type: string
+ *           required: true
  *        -  in: path
  *           name: id
  *           type: string
