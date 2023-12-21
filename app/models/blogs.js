@@ -14,9 +14,9 @@ const Schema = new mongoose.Schema({
   tags: { type: [String] ,default:[]},
   category: { type:[ mongoose.Types.ObjectId],ref:'Category', required: true },
   comments:{type:[commentSchema],default:[]},
-  like:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
-  dislike:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
-  bookmark:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
+  likes:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
+  dislikes:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
+  bookmarks:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
 
 
 

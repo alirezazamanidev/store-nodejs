@@ -120,6 +120,57 @@ router.get('/:id',BlogController.getOneBlogById);
  * 
  */
 router.delete('/:id',BlogController.removeBlog);
+/**
+ * @swagger
+ * /admin/blogs/update/{id}:
+ *  patch:
+ *   tags: [Blog(AdminPanel)]
+ *   summary: update one  blog
+ *   consumes:
+ *     -  multipart/form-data
+ *    
+ *            
+ *   parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
+ * 
+ *       -  in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *       -  in: formData
+ *          name: title
+ *          type: string
+ *       -  in: formData
+ *          name: short_text
+ *          type: string
+ *       -  in: formData
+ *          name: text
+ *          type: string
+ *       -  in: formData
+ *          name: tags
+ *          example: tag1#tag2#tag3#foo_bar#fo_bar2 || str || undifind
+ *          type: string
+ *       -  in: formData
+ *          name: category
+ *          type: string
+ *       -  in: formData
+ *          name: image
+ *          type: file
+ *          
+ *          
+ *          
+ *   responses:
+ *       201:
+ *         description: success
+ *       401:
+ *         description: Unautorized!
+ * 
+ */
+router.patch('/update/:id',UploadFile.single('image'),stringToArray('tags'),BlogController.updateBlog);
 
 module.exports={
     BlogRoutes:router

@@ -49,28 +49,29 @@ class BlogController extends Controller {
           },
         },
         {
-            $lookup: {
-              from: "categories",
-              foreignField: "_id",
-              localField: "category",
-              as: "category",
-            },
+          $lookup: {
+            from: "categories",
+            foreignField: "_id",
+            localField: "category",
+            as: "category",
           },
-          {
-            $unwind:'$category'
-          },
+        },
         {
-            $unwind:'$author'
-        },{
-            $project:{
-                "author.__v":0,
-                "category.__v":0,
-                "author.bills":0,
-                "author.otp":0,
-                "author.Roles":0,
-                "author.diacount":0,
-            }
-        }
+          $unwind: "$category",
+        },
+        {
+          $unwind: "$author",
+        },
+        {
+          $project: {
+            "author.__v": 0,
+            "category.__v": 0,
+            "author.bills": 0,
+            "author.otp": 0,
+            "author.Roles": 0,
+            "author.diacount": 0,
+          },
+        },
       ]);
       res.status(200).json({
         data: {
@@ -83,44 +84,83 @@ class BlogController extends Controller {
     }
   }
 
-  async getOneBlogById(req,res,next){
+  async getOneBlogById(req, res, next) {
     try {
-      const {id}=req.params;
-      const blog=await this.findBlog({_id:id});
+      const { id } = req.params;
+      const blog = await this.findBlog({ _id: id });
       return res.status(200).json({
-        data:{
-          statusCode:200,
-          blog
-        }
-      })
+        data: {
+          statusCode: 200,
+          blog,
+        },
+      });
     } catch (error) {
       next(err);
     }
   }
-  async findBlog(query={}){
-    const blog=await BlogModel.findOne(query).populate([{
-      path:'category',
-      select:['title']
-    },{path:'author',select:['phone','first_name','last_name']}]);
-    if(!blog) throw createHttpError.NotFound('Blog not found');
+  async findBlog(query = {}) {
+    const blog = await BlogModel.findOne(query).populate([
+      {
+        path: "category",
+        select: ["title"],
+      },
+      { path: "author", select: ["phone", "first_name", "last_name"] },
+    ]);
+    if (!blog) throw createHttpError.NotFound("Blog not found");
     delete blog.category.children;
     return blog;
   }
 
-  async removeBlog(req,res,next){
+  async removeBlog(req, res, next) {
     try {
-      const {id}=req.params;
-      const blog=await this.findBlog({_id:id});
-      const resultBlog=await BlogModel.deleteOne({_id:blog._id});
-      if(resultBlog.deletedCount ==0) throw createHttpError.InternalServerError();
+      const { id } = req.params;
+      const blog = await this.findBlog({ _id: id });
+      const resultBlog = await BlogModel.deleteOne({ _id: blog._id });
+      if (resultBlog.deletedCount == 0)
+        throw createHttpError.InternalServerError();
       res.status(200).json({
-        data:{
-          statusCode:200,
-          message:'The blog has been deleted!'
-        }
-      })
+        data: {
+          statusCode: 200,
+          message: "The blog has been deleted!",
+        },
+      });
     } catch (error) {
       next(error);
+    }
+  }
+
+  async updateBlog(req, res, next) {
+    try {
+      const { id } = req.params;
+      await this.findBlog({ _id: id });
+
+      if (req?.body?.fileUploadPath && req?.body?.filename) {
+        req.body.image = path.join(req.body.fileUploadPath, req.body.filename);
+        req.body.image = req.body.image.replace(/\\/gi, "/");
+      }
+      const data = req.body;
+      let nullishData = ["", " ", "0", 0, null, undefined];
+      let blackListField = ["bookmarks", "comments", "likes", "dislikes"];
+      Object.keys(data).forEach((key) => {
+        if (blackListField.includes(key)) delete data[key];
+        if (typeof data[key] == "string") data[key] = data[key].trim();
+        if (Array.isArray(data[key]) && data[key].length > 0)
+          data[key] = data[key].map((item) => item.trim());
+        if (nullishData.includes(data[key])) delete data[key];
+      });
+
+      const resultUpdate = await BlogModel.updateOne({_id:id},{$set:data});
+      if(resultUpdate.modifiedCount==0) throw createHttpError.InternalServerError();
+      return res.status(200).json({
+        data: {
+          statusCode: 200,
+          meessage: "Blog has been updated!",
+      
+        },
+      });
+    } catch (err) {
+      deleteFileInPublic(req.body.image);
+      next(err);
     }
   }
 }
