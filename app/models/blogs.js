@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
+const { commentSchema } = require("./public");
 
-const commentSchema=new mongoose.Schema({
-  user:{type:mongoose.Types.ObjectId,ref:'user',required:true},
-  comment:{type:String,required:true},
-  parent:{type:mongoose.Types.ObjectId}
-},{timestamps:true})
+
 const Schema = new mongoose.Schema({
   author: { type: mongoose.Types.ObjectId,ref:'user', required: true },
   title: { type: String, required: true },

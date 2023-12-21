@@ -14,7 +14,8 @@ const Schema=new mongoose.Schema({
     bills:{type:[],default:[]},
     diacount:{type:Number,default:0},
     birthDay:{type:String},
-    Roles:{type:[String],default:['User']}
+    Roles:{type:[String],default:['User']},
+    courses:{type:[mongoose.Types.ObjectId],ref:'Course',default:[]}
 
 })
 module.exports= {

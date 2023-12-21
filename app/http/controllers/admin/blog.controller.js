@@ -1,6 +1,6 @@
 const createHttpError = require("http-errors");
 const { BlogModel } = require("../../../models/blogs");
-const { deleteFileInPublic } = require("../../../utils/functions");
+const { deleteFileInPublic, checkDataForUpdate } = require("../../../utils/functions");
 const { createBlogSchema } = require("../../validators/admin/blog.schrma");
 const Controller = require("../controller");
 const path = require("path");
@@ -131,7 +131,7 @@ class BlogController extends Controller {
 
   async updateBlog(req, res, next) {
     try {
-      const { id } = req.params;
+      const { id } = req.params;;
       await this.findBlog({ _id: id });
 
       if (req?.body?.fileUploadPath && req?.body?.filename) {
@@ -139,15 +139,9 @@ class BlogController extends Controller {
         req.body.image = req.body.image.replace(/\\/gi, "/");
       }
       const data = req.body;
-      let nullishData = ["", " ", "0", 0, null, undefined];
+     
       let blackListField = ["bookmarks", "comments", "likes", "dislikes"];
-      Object.keys(data).forEach((key) => {
-        if (blackListField.includes(key)) delete data[key];
-        if (typeof data[key] == "string") data[key] = data[key].trim();
-        if (Array.isArray(data[key]) && data[key].length > 0)
-          data[key] = data[key].map((item) => item.trim());
-        if (nullishData.includes(data[key])) delete data[key];
-      });
+      checkDataForUpdate(data,blackListField);
 
       const resultUpdate = await BlogModel.updateOne({_id:id},{$set:data});
       if(resultUpdate.modifiedCount==0) throw createHttpError.InternalServerError();

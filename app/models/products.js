@@ -1,23 +1,24 @@
 const mongoose=require('mongoose');
+const { commentSchema } = require('./public');
 
 
 const Schema=new mongoose.Schema({
     title:{type:String,required:true},
-    short_disc:{type:String,required:true},
-    description:{type:String,required:true},
+    short_text:{type:String,required:true},
+    text:{type:String,required:true},
     images :{type:[String],required:true},
     tags: { type: [String] ,default:[]},
-    category: { type: mongoose.Types.ObjectId, required: true },
-    comments:{type:[],default:[]},
-    like:{type:[mongoose.Types.ObjectId] ,default:[]},
-    dislike:{type:[mongoose.Types.ObjectId] ,default:[]},
+    category: { type: mongoose.Types.ObjectId,ref:'Category', required: true },
+    comments:{type:[commentSchema],default:[]},
+    likes:{type:[mongoose.Types.ObjectId] ,default:[]}, 
+    dislikes:{type:[mongoose.Types.ObjectId] ,default:[]},
     bookmark:{type:[mongoose.Types.ObjectId] ,default:[]},
     price:{type:Number,default:0},
     count:{type:Number ,default:0},
     disCount:{type:Number,default:0},
-    type:{type:String,required:true},
+    type:{type:String,required:true}, // virtual or video
     time:{type:String},
-    teacher:{type:mongoose.Schema.ObjectId},
+    supllier:{type:mongoose.Schema.ObjectId},
     format:{type:String},
     feture:{type:Object,default:{
         length:"",
@@ -26,9 +27,8 @@ const Schema=new mongoose.Schema({
         weight:"",
         colors:[],
         models:[],
-        madein:''
+        madeIn:''
     }},
-    format:{type:String}
 
 })
 module.exports= {
