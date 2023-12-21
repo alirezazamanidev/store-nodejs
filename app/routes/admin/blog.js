@@ -10,6 +10,12 @@ const router = require("express").Router();
  *  get:
  *   tags: [Blog(AdminPanel)]
  *   summary: get All blogs
+ *   parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
  *   responses:
  *       200:
  *         description: success
@@ -63,6 +69,8 @@ router.get('/',BlogController.getListOfBlogs);
  *   responses:
  *       201:
  *         description: success
+ *       401:
+ *         description: Unautorized!
  * 
  */
 router.post('/add',UploadFile.single('image'),stringToArray('tags'),BlogController.createBlog);
