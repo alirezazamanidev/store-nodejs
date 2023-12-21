@@ -38,7 +38,27 @@ module.exports = class Application {
               title: "Store Api Document",
               description: "This store Api document. ",
               version: "2.0.0",
-            }
+            },
+            servers: [
+              {
+                url: "http://localhost:3000",
+              },
+              {
+                url: "http://localhost:4000",
+              },
+            ],
+            components : {
+              securitySchemes : {
+                BearerAuth : {
+                  type: "http",
+                  scheme: "bearer",
+                  bearerFormat: "JWT",
+                  
+                }
+              }
+            },
+            security : [{BearerAuth : [] }]
+            
           },
 
           apis: [ "./app/routes/**/*.js"],

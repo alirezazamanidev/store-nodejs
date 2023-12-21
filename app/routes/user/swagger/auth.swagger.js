@@ -14,7 +14,7 @@
  *          CheckOTP:
  *              type: object
  *              required:
- *                  -   mobile
+ *                  -   phone
  *                  -   code
  *              properties:
  *                  phone:
