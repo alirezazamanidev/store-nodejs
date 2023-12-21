@@ -1,3 +1,4 @@
+const createHttpError = require("http-errors");
 const { BlogModel } = require("../../../models/blogs");
 const { deleteFileInPublic } = require("../../../utils/functions");
 const { createBlogSchema } = require("../../validators/admin/blog.schrma");
@@ -77,6 +78,47 @@ class BlogController extends Controller {
           blogs,
         },
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getOneBlogById(req,res,next){
+    try {
+      const {id}=req.params;
+      const blog=await this.findBlog({_id:id});
+      return res.status(200).json({
+        data:{
+          statusCode:200,
+          blog
+        }
+      })
+    } catch (error) {
+      next(err);
+    }
+  }
+  async findBlog(query={}){
+    const blog=await BlogModel.findOne(query).populate([{
+      path:'category',
+      select:['title']
+    },{path:'author',select:['phone','first_name','last_name']}]);
+    if(!blog) throw createHttpError.NotFound('Blog not found');
+    delete blog.category.children;
+    return blog;
+  }
+
+  async removeBlog(req,res,next){
+    try {
+      const {id}=req.params;
+      const blog=await this.findBlog({_id:id});
+      const resultBlog=await BlogModel.deleteOne({_id:blog._id});
+      if(resultBlog.deletedCount ==0) throw createHttpError.InternalServerError();
+      res.status(200).json({
+        data:{
+          statusCode:200,
+          message:'The blog has been deleted!'
+        }
+      })
     } catch (error) {
       next(error);
     }

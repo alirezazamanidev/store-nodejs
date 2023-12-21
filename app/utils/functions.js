@@ -59,7 +59,8 @@ function VerifyRefreshToken(token){
             const {phone}=payload || {};
             const user=await UserModel.findOne({phone},{password:0,otp:0});
             if(!user) reject(createHttpError('حساب کاربری شما یافت نشد!'));
-            const refreshToken=await redisClient.get(user.id);
+            const refreshToken=await redisClient.get(user.id || 'key_defualt');
+            if(!refreshToken) reject(createHttpError.Unauthorized('ورود انجام نشد'))
             if(refreshToken==token) return resolve(phone);
             reject(createHttpError.Unauthorized('ورود انجام نشد'))
         })

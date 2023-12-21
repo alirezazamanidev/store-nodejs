@@ -75,6 +75,52 @@ router.get('/',BlogController.getListOfBlogs);
  */
 router.post('/add',UploadFile.single('image'),stringToArray('tags'),BlogController.createBlog);
 
+/**
+ * @swagger
+ * /admin/blogs/{id}:
+ *  get:
+ *   tags: [Blog(AdminPanel)]
+ *   summary: get one blog byc id
+ *   parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
+ *       -  in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *   responses:
+ *       200:
+ *         description: success
+ * 
+ */
+
+router.get('/:id',BlogController.getOneBlogById);
+/**
+ * @swagger
+ * /admin/blogs/{id}:
+ *  delete:
+ *   tags: [Blog(AdminPanel)]
+ *   summary: delete one blog byc id
+ *   parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
+ *       -  in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *   responses:
+ *       200:
+ *         description: success
+ * 
+ */
+router.delete('/:id',BlogController.removeBlog);
+
 module.exports={
     BlogRoutes:router
 }

@@ -6,13 +6,13 @@ const commentSchema=new mongoose.Schema({
   parent:{type:mongoose.Types.ObjectId}
 },{timestamps:true})
 const Schema = new mongoose.Schema({
-  author: { type: mongoose.Types.ObjectId, required: true },
+  author: { type: mongoose.Types.ObjectId,ref:'user', required: true },
   title: { type: String, required: true },
   short_text: { type: String, required: true },
   text: { type: String, required: true },
   image: { type: String, required: true },
   tags: { type: [String] ,default:[]},
-  category: { type:[ mongoose.Types.ObjectId], required: true },
+  category: { type:[ mongoose.Types.ObjectId],ref:'Category', required: true },
   comments:{type:[commentSchema],default:[]},
   like:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
   dislike:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
