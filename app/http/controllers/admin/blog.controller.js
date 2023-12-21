@@ -15,6 +15,7 @@ class BlogController extends Controller {
       const { title, text, short_text, tags, category } = blogDataBody;
       const image = req.body.image;
       const newblog = await BlogModel.create({
+        author:req.user._id,
         image,
         title,
         short_text,
@@ -22,10 +23,11 @@ class BlogController extends Controller {
         tags,
         category,
       });
-      return res.json(201).json({
+      return res.status(201).json({
         data:{
             statusCode:201,
-            meessage:'Blog has been created!'
+            meessage:'Blog has been created!',
+            newblog
         }
       });
     } catch (error) {

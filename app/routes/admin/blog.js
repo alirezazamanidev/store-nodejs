@@ -28,6 +28,11 @@ router.get('/',BlogController.getListOfBlogs);
  *    
  *            
  *   parameters:
+ *       -  in: header
+ *          example: Bearer Token...
+ *          name: access_token
+ *          type: string
+ *          required: true
  *       -  in: formData
  *          name: title
  *          type: string

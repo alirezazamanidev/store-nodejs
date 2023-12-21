@@ -6,7 +6,7 @@ const commentSchema=new mongoose.Schema({
   parent:{type:mongoose.Types.ObjectId}
 },{timestamps:true})
 const Schema = new mongoose.Schema({
-  author: { type: mongoose.Types.ObjectId },
+  author: { type: mongoose.Types.ObjectId, required: true },
   title: { type: String, required: true },
   short_text: { type: String, required: true },
   text: { type: String, required: true },
