@@ -9,5 +9,5 @@ router.get('/:id',BlogController.getOneBlogById);
 router.delete('/:id',BlogController.removeBlog);
 router.patch('/update/:id',UploadFile.single('image'),stringToArray('tags'),BlogController.updateBlog);
 module.exports={
-    BlogRoutes:router
+    AdminApiBlogRoutes:router
 }
