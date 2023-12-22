@@ -1,6 +1,5 @@
 const { ProductModel } = require("../../../models/products");
-const { deleteFileInPublic ,setFeatures} = require("../../../utils/functions");
-const path=require('path');
+const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest} = require("../../../utils/functions");
 const {
   createProductSchema,
 } = require("../../validators/admin/product.schrma");
@@ -9,12 +8,10 @@ const Controller = require("../controller");
 class ProductController extends Controller {
   async addProduct(req, res, next) {
     try {
+    
+      const images=ListOfImagesFromRequest(req.files || [],req.body.fileUploadPath);
+
       const productBody = await createProductSchema.validateAsync(req.body);
-      req.body.image = path.join(
-        productBody.fileUploadPath,
-        productBody.filename
-      );
-      req.body.image = req.body.image.replace(/\\/gi, "/");
       const { title, text, short_text, category, tags, count, price, discount, type } = productBody;
       const supplier = req.user._id;
       let features = setFeatures(req.body)
@@ -27,7 +24,7 @@ class ProductController extends Controller {
         count,
         price,
         discount,
-        image:req.body.image,
+        images,
         features,
         supplier,
         type
@@ -58,6 +55,14 @@ class ProductController extends Controller {
   }
   async getAllProduct(req, res, next) {
     try {
+
+      const products=await ProductModel.find({});
+      return res.status(200).json({
+        data:{
+          statusCode:200,
+          products
+        }
+      })
     } catch (error) {
       next(error);
     }

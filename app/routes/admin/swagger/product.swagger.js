@@ -46,8 +46,11 @@
  *                      type: string
  *                      description: the title of product
  *                      example: 100
- *                  image:
- *                      type: file
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: file
+ *                          format: binery
  *                   
  *                  height:
  *                      type: string
@@ -84,6 +87,22 @@
  *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/Product'
+ *          
+ *          responses:
+ *              201:
+ *                  description: created new Product
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/definitions/publicDefinition'
+ */
+/**
+ * @swagger
+ *  /admin/products/list:
+ *      get:
+ *          tags: [Product(AdminPanel)]
+ *          summary: get all  products
+ *     
  *          
  *          responses:
  *              201:

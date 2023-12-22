@@ -4,7 +4,8 @@ const { UploadFile } = require("../../utils/multer");
 
 const router = require("express").Router();
 
-router.post('/add',UploadFile.single('image'),stringToArray('tags'),ProductController.addProduct);
+router.post('/add',UploadFile.array('images',10),stringToArray('tags'),ProductController.addProduct);
+router.get('/list',ProductController.getAllProduct);
 module.exports={
     AdminApiProductRoutes :router
 }
