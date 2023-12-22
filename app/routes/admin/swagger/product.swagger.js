@@ -1,21 +1,3 @@
-/**
- * @swagger
- *  components:
- *      schemas:
- *          Color:
- *              type: array
- *              items: 
- *                  type: string
- *                  enum:
- *                      -   black
- *                      -   white
- *                      -   gray                
- *                      -   red
- *                      -   blue
- *                      -   green
- *                      -   orange
- *                      -   purple
- */ 
 
 /**
  * @swagger
@@ -66,8 +48,28 @@
  *                      example: 100
  *                  image:
  *                      type: file
- *                      
- *                          
+ *                   
+ *                  height:
+ *                      type: string
+ *                      description: the height of product packet
+ *                      example: 0
+ *                  weight:
+ *                      type: string
+ *                      description: the weight of product packet
+ *                      example: 0
+ *                  width:
+ *                      type: string
+ *                      description: the with of product packet
+ *                      example: 0
+ *                  length:
+ *                      type: string
+ *                      description: the length of product packet
+ *                      example: 0
+ *                  type:
+ *                      type: string
+ *                      description: the type of product 
+ *                      example: virtual - physical
+ *             
  */
 
 /**

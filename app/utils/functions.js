@@ -84,9 +84,34 @@ function checkDataForUpdate(data,blackList=[]){
         if (nullishData.includes(data[key])) delete data[key];
       });
 }
+function setFeatures(body) {
+    const { width, weight, height, length } = body;
+    let features = {};
+    
+    if (!isNaN(+width) || !isNaN(+height) || !isNaN(+weight) || !isNaN(+length)) {
+        if (!width) features.width = 0;
+        else features.width = +width;
+        if (!height) features.height = 0;
+        else features.height = +height;
+        if (!weight) features.weight = 0;
+        else features.weight = +weight;
+        if (!length) features.length = 0;
+        else features.length = +length;
+    }
+    return features
+}
+function ListOfImagesFromRequest(files, fileUploadPath) {
+    if (files?.length > 0) {
+        return ((files.map(file => path.join(fileUploadPath, file.filename))).map(item => item.replace(/\\/g, "/")))
+    } else {
+        return []
+    }
+}
 module.exports={
     RandomNumberGenerator,
+    ListOfImagesFromRequest,
     checkDataForUpdate,
+    setFeatures,
     SignAccessToken,
     SignRefreshToken,
     VerifyRefreshToken,
