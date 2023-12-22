@@ -112,3 +112,22 @@
  *                          schema:
  *                              $ref: '#/definitions/publicDefinition'
  */
+/**
+ * @swagger
+ *  /admin/products/{id}:
+ *      get:
+ *          tags: [Product(AdminPanel)]
+ *          summary: find one   product with id
+ *          parameters:
+ *             -  in: path
+ *                type: string
+ *                descreiption: objectId of product
+ *          
+ *          responses:
+ *              201:
+ *                  description: created new Product
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/definitions/publicDefinition'
+ */

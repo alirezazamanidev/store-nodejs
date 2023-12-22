@@ -1,8 +1,10 @@
+const createHttpError = require("http-errors");
 const { ProductModel } = require("../../../models/products");
 const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest} = require("../../../utils/functions");
 const {
   createProductSchema,
 } = require("../../validators/admin/product.schrma");
+const { ObjectIdValidator } = require("../../validators/public.validator");
 const Controller = require("../controller");
 
 class ProductController extends Controller {
@@ -53,7 +55,7 @@ class ProductController extends Controller {
       next(error);
     }
   }
-  async getAllProduct(req, res, next) {
+  async getAllProducts(req, res, next) {
     try {
 
       const products=await ProductModel.find({});
@@ -69,9 +71,26 @@ class ProductController extends Controller {
   }
   async getOneProduct(req, res, next) {
     try {
+      const {id}=req.params;
+      const product=await this.findProductById(id);
+      return res.status(200).json({
+        data:{
+          statusCode:200,
+          product
+        }
+      })
     } catch (error) {
       next(error);
     }
+  }
+
+  async findProductById(productId){
+    console.log(productId);
+
+    const product=await ProductModel.findById(productId);
+    if(!product)throw createHttpError.NotFound('The  product is not found!');
+    return product;
+
   }
 }
 
