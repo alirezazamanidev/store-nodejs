@@ -1,7 +1,7 @@
 const createHttpError = require("http-errors");
-const { CategoryModel } = require("../../../models/categories");
-const Controller = require("../controller");
-const { categorySchema, UpdateCategorySchema } = require("../../validators/admin/category.schema");
+const { CategoryModel } = require("../../../../models/categories");
+const Controller = require("../../controller");
+const { categorySchema, UpdateCategorySchema } = require("../../../validators/admin/category.schema");
 const mongoose = require("mongoose");
 
 class CategoryController extends Controller {

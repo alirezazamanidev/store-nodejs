@@ -1,10 +1,11 @@
 const createHttpError = require("http-errors");
-const { CourseModel } = require("../../../models/course");
-const { createCourseSchema } = require("../../validators/admin/course.schrma");
-const Controller = require("../controller");
+const { CourseModel } = require("../../../../models/course");
+const { createCourseSchema } = require("../../../validators/admin/course.schrma");
+const Controller = require("../../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 const path = require("path");
-const { deleteFileInPublic } = require("../../../utils/functions");
+const mongoose=require('mongoose');
+const { deleteFileInPublic } = require("../../../../utils/functions");
 class CourseController extends Controller {
   async addCourse(req, res, next) {
     try {
@@ -67,8 +68,7 @@ class CourseController extends Controller {
   async getOneCourseById(req,res,next){
     try {
         const {id}=req.params;
-        const course=await CourseModel.findById(id);
-        if(!course) throw createHttpError.NotFound('The Course not found');
+        const course=await this.findCourseById(id);
         return res.status(HttpStatus.OK).json({
             data:{
                 statusCode:HttpStatus.OK,
@@ -80,17 +80,42 @@ class CourseController extends Controller {
         next(error);
     }
   }
+  async addChapter(req,res,next){
+    try {
+        const {id,title,text}=req.body;
+        await this.findCourseById(id);
+        const savedChapterReqult=await CourseModel.updateOne({_id:id},{$push:{
+            chapters:{
+                title,
+                text,
+                episodes:[]
+                
+            }
+        }});
+        if(savedChapterReqult.modifiedCount) throw createHttpError.InternalServerError();
+
+        return res.status(HttpStatus.CREATED).json({
+            data:{
+                statusCode:HttpStatus.CREATED,
+                message:"the Chapter has been created!"
+            }
+        });
+        
+    } catch (error) {
+        next(error);
+    }
+  }
   async removeOneCourse(req, res, next) {
     try {
     } catch (err) {
       next(err);
     }
   }
-  async UpdateCourse(req, res, next) {
-    try {
-    } catch (err) {
-      next(err);
-    }
+  async findCourseById(id) {
+    if(!mongoose.isValidObjectId(id)) throw createHttpError.BadRequest('Id is not objectId!');
+    const course=await CourseModel.findById(id);
+    if(!course) throw createHttpError.NotFound("The course not founded!");
+    return course;
   }
 }
 

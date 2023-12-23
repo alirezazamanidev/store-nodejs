@@ -1,11 +1,11 @@
 const createHttpError = require("http-errors");
-const { ProductModel } = require("../../../models/products");
-const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest, copyObject, checkDataForUpdate} = require("../../../utils/functions");
+const { ProductModel } = require("../../../../models/products");
+const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest, copyObject, checkDataForUpdate} = require("../../../../utils/functions");
 const {
   createProductSchema,
-} = require("../../validators/admin/product.schrma");
-const { ObjectIdValidator } = require("../../validators/public.validator");
-const Controller = require("../controller");
+} = require("../../../validators/admin/product.schrma");
+const { ObjectIdValidator } = require("../../../validators/public.validator");
+const Controller = require("../../controller");
 const {StatusCodes}=require('http-status-codes');
 const ProductBlackList = {
   BOOKMARKS: "bookmarks",

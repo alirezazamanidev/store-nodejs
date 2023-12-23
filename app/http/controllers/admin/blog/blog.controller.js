@@ -1,8 +1,8 @@
 const createHttpError = require("http-errors");
-const { BlogModel } = require("../../../models/blogs");
-const { deleteFileInPublic, checkDataForUpdate } = require("../../../utils/functions");
-const { createBlogSchema } = require("../../validators/admin/blog.schrma");
-const Controller = require("../controller");
+const { BlogModel } = require("../../../../models/blogs");
+const { deleteFileInPublic, checkDataForUpdate } = require("../../../../utils/functions");
+const { createBlogSchema } = require("../../../validators/admin/blog.schrma");
+const Controller = require("../../controller");
 const path = require("path");
 class BlogController extends Controller {
   async createBlog(req, res, next) {
