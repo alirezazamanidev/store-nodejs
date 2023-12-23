@@ -102,11 +102,14 @@
  *      get:
  *          tags: [Product(AdminPanel)]
  *          summary: get all  products
- *     
+ *          parameters:
+ *              -  in: query
+ *                 type: string
+ *                 name: search
  *          
  *          responses:
- *              201:
- *                  description: created new Product
+ *              200:
+ *                  description: get All  Products
  *                  content:
  *                      application/json:
  *                          schema:

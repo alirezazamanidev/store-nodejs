@@ -31,6 +31,8 @@ const Schema=new mongoose.Schema({
     }},
 
 })
+
+Schema.index({title:'text',short_text:"text",text:'text'});
 module.exports= {
     ProductModel:mongoose.model('product',Schema)
 }

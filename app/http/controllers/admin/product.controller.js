@@ -6,6 +6,7 @@ const {
 } = require("../../validators/admin/product.schrma");
 const { ObjectIdValidator } = require("../../validators/public.validator");
 const Controller = require("../controller");
+const {StatusCodes}=require('http-status-codes');
 
 class ProductController extends Controller {
   async addProduct(req, res, next) {
@@ -31,8 +32,8 @@ class ProductController extends Controller {
         supplier,
         type
       })
-      return res.status(201).json({
-        statusCode: 201,
+      return res.status(StatusCodes.CREATED).json({
+        statusCode: StatusCodes.CREATED,
         data: {
           message: "The product has been created!"
         }
@@ -52,11 +53,20 @@ class ProductController extends Controller {
 
   async getAllProducts(req, res, next) {
     try {
-
-      const products=await ProductModel.find({});
-      return res.status(200).json({
+      const search=req?.query?.search || "";
+      let products=[];
+      if(search){
+        products=await ProductModel.find({
+          $text:{
+            $search:new RegExp(search,'gi')
+          }
+        });
+      }else {
+        products=await ProductModel.find({});
+      } 
+      return res.status(StatusCodes.OK).json({
         data:{
-          statusCode:200,
+          statusCode:StatusCodes.OK,
           products
         }
       })
@@ -68,9 +78,9 @@ class ProductController extends Controller {
     try {
       const {id}=req.params;
       const product=await this.findProductById(id);
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data:{
-          statusCode:200,
+          statusCode:StatusCodes.OK,
           product
         }
       })
@@ -84,9 +94,9 @@ class ProductController extends Controller {
       const product=await this.findProductById(id);
       const recmoveProductResult=await ProductModel.deleteOne({_id:product._id});
       if(recmoveProductResult.deletedCount==0) throw createHttpError.InternalServerError(); 
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data:{
-          statusCode:200,
+          statusCode:StatusCodes.OK,
           message:'The product has been removed!',
         }
       })
