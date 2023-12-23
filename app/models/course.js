@@ -25,14 +25,14 @@ const Schema=new mongoose.Schema({
     dislikes:{type:[mongoose.Types.ObjectId] ,default:[]},
     bookmark:{type:[mongoose.Types.ObjectId] ,default:[]},
     price:{type:Number,default:0},
-    chapter:{type:[chapterSchema],default:[]},
+    chapters:{type:[chapterSchema],default:[]},
     disCount:{type:Number,default:0},
     type:{type:String,default:'free'}, // free or cash
     time:{type:String,default:'00:00:00'},
     teacher:{type:mongoose.Schema.ObjectId,ref:'user'},
     students:{type:[mongoose.Types.ObjectId],ref:'user',default:[]}
-
-})
+});
+Schema.index({title:"text",short_text:"text",text:"text"});
 module.exports= {
     CourseModel:mongoose.model('Course',Schema)
 }

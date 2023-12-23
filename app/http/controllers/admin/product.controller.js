@@ -66,7 +66,7 @@ class ProductController extends Controller {
       let blackListFields = Object.values(ProductBlackList);
       checkDataForUpdate(data, blackListFields)
       const updateProductResult = await ProductModel.updateOne({ _id: product._id }, { $set: data })
-      if (updateProductResult.modifiedCount == 0) throw { status: HttpStatus.INTERNAL_SERVER_ERROR, message: "خطای داخلی" }
+      if (updateProductResult.modifiedCount == 0) throw { status: StatusCodes.INTERNAL_SERVER_ERROR, message: "خطای داخلی" }
       return res.status(StatusCodes.OK).json({
         data : {
           statusCode: StatusCodes.OK,
