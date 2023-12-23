@@ -7,6 +7,7 @@ const router=require('express').Router()
 
 router.get('/list',CourseController.getListOfCourses)  // get all courses
 router.post('/add',UploadFile.single('image'),stringToArray('tags'),CourseController.addCourse) // add one course
+router.get('/:id',CourseController.getOneCourseById) // get one course by id
 module.exports={
     AdminApiCourseRoutes:router
 }
