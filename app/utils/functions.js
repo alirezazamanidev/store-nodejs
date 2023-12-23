@@ -85,9 +85,9 @@ function checkDataForUpdate(data,blackList=[]){
       });
 }
 function setFeatures(body) {
-    const { width, weight, height, length } = body;
+    const { colors, width, weight, height, length } = body;
     let features = {};
-    
+    features.colors = colors;
     if (!isNaN(+width) || !isNaN(+height) || !isNaN(+weight) || !isNaN(+length)) {
         if (!width) features.width = 0;
         else features.width = +width;
