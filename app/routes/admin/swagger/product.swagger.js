@@ -132,3 +132,23 @@
  *                          schema:
  *                              $ref: '#/definitions/publicDefinition'
  */
+/**
+ * @swagger
+ *  /admin/products/remove/{id}:
+ *      delete:
+ *          tags: [Product(AdminPanel)]
+ *          summary: delete one product with id
+ *          parameters:
+ *             -  in: path
+ *                type: string
+ *                name: id
+ *                descreiption: objectId of product
+ *          
+ *          responses:
+ *              201:
+ *                  description: success
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/definitions/publicDefinition'
+ */

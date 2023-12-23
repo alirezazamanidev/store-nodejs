@@ -49,12 +49,7 @@ class ProductController extends Controller {
       next(error);
     }
   }
-  async removeProduct(req, res, next) {
-    try {
-    } catch (error) {
-      next(error);
-    }
-  }
+
   async getAllProducts(req, res, next) {
     try {
 
@@ -83,10 +78,27 @@ class ProductController extends Controller {
       next(error);
     }
   }
+  async removeProductById(req,res,next){
+    try {
+      const {id}=req.params;
+      const product=await this.findProductById(id);
+      const recmoveProductResult=await ProductModel.deleteOne({_id:product._id});
+      if(recmoveProductResult.deletedCount==0) throw createHttpError.InternalServerError(); 
+      return res.status(200).json({
+        data:{
+          statusCode:200,
+          message:'The product has been removed!',
+        }
+      })
+      
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async findProductById(productId){
     const {id}=await ObjectIdValidator.validateAsync({id:productId});
-    const product=await ProductModel.findById(productId);
+    const product=await ProductModel.findById(id);
     if(!product)throw createHttpError.NotFound('The  product is not found!');
     return product;
 
