@@ -12,20 +12,22 @@ class CourseController extends Controller {
       const { fileUploadPath, filename } = req.body;
 
       const image = path.join(fileUploadPath, filename).replace(/\\/g, "/");
-      const { title, short_text, text, tags, category, price, discount } =
+      const { title, short_text, text, tags,type, category, price, discount } =
         req.body;
+     if(Number(price) >0 && type =='free') throw createHttpError.BadRequest('برای دوره رایگان نمی توان قیمت تایین کرد')
       const course = await CourseModel.create({
         teacher:req.user._id,
         title,
         short_text,
         text,
+        type,
         tags,
         category,
         price,
         discount,
         image,
       });
-      if(!course?._id) throw createHttpError.Unauthorized();
+      if(!course?._id) throw createHttpError.InternalServerError();
 
       res.status(HttpStatus.CREATED).json({
         data: {
@@ -41,7 +43,7 @@ class CourseController extends Controller {
   async getListOfCourses(req, res, next) {
     try {
       const { search } = req.query;
-      const courses = null;
+      let courses;
       if (search) {
         courses = await CourseModel.find({
           $text: {
