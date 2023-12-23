@@ -46,11 +46,11 @@ function fileFilter(req,file,cb){
     if (mimetypes.includes(ext)) {
       return cb(null, true);
     }
-    return cb(createHttpError.BadRequest("فرمت ارسال شده ویدیو صحیح نمیباشد"));
+    return cb(createHttpError.BadRequest("فرمت ارسال شده تصویر صحیح نمیباشد"));
 }
 const UploadFile = multer({
   storage,
-  limits:{fileSize:(1*1000*1000)},
+  limits:{fileSize:(5*1000*1000)},
   fileFilter
 });
 

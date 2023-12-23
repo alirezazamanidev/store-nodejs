@@ -28,15 +28,13 @@ function RandomNumberGenerator() {
         });
     })
 }
-
-
 function SignRefreshToken(userId){
 
     return new Promise(async(resolve,reject)=>{
         const user=await UserModel.findById(userId);
         const payload={
             phone:user.phone,
-            userId:user.id
+            userId:user._id
         }
 
 
@@ -50,7 +48,6 @@ function SignRefreshToken(userId){
         });
     })
 }
-
 function VerifyRefreshToken(token){
 
     return new Promise((resolve,reject)=>{
