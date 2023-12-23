@@ -121,6 +121,7 @@
  *          parameters:
  *             -  in: path
  *                type: string
+ *                name: id
  *                descreiption: objectId of product
  *          
  *          responses:

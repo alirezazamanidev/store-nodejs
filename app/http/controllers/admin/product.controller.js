@@ -85,8 +85,7 @@ class ProductController extends Controller {
   }
 
   async findProductById(productId){
-    console.log(productId);
-
+    const {id}=await ObjectIdValidator.validateAsync({id:productId});
     const product=await ProductModel.findById(productId);
     if(!product)throw createHttpError.NotFound('The  product is not found!');
     return product;
