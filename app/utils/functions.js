@@ -74,7 +74,7 @@ function deleteFileInPublic(fileAddress){
 if(fs.existsSync(pathFile)) fs.unlinkSync(pathFile) 
     }  
 }
-function checkDataForUpdate(data,blackList=[]){
+function checkDataForUpdate(data={},blackListField=[]){
     let nullishData = ["", " ", "0", 0, null, undefined];
       Object.keys(data).forEach((key) => {
         if (blackListField.includes(key)) delete data[key];
@@ -107,6 +107,10 @@ function ListOfImagesFromRequest(files, fileUploadPath) {
         return []
     }
 }
+
+function copyObject(object){
+    return JSON.parse(JSON.stringify(object));
+}
 module.exports={
     RandomNumberGenerator,
     ListOfImagesFromRequest,
@@ -115,5 +119,6 @@ module.exports={
     SignAccessToken,
     SignRefreshToken,
     VerifyRefreshToken,
+    copyObject,
     deleteFileInPublic
 }

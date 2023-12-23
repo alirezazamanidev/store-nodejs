@@ -1,13 +1,25 @@
 const createHttpError = require("http-errors");
 const { ProductModel } = require("../../../models/products");
-const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest} = require("../../../utils/functions");
+const { deleteFileInPublic ,setFeatures, ListOfImagesFromRequest, copyObject, checkDataForUpdate} = require("../../../utils/functions");
 const {
   createProductSchema,
 } = require("../../validators/admin/product.schrma");
 const { ObjectIdValidator } = require("../../validators/public.validator");
 const Controller = require("../controller");
 const {StatusCodes}=require('http-status-codes');
-
+const ProductBlackList = {
+  BOOKMARKS: "bookmarks",
+  LIKES: "likes",
+  DISLIKES: "dislikes",
+  COMMENTS: "comments",
+  SUPPLIER: "supplier",
+  WEIGHT: "weight",
+  WIDTH: "width",
+  LENGTH: "length",
+  HEIGHT: "height",
+  COLORS: "colors"
+}
+Object.freeze(ProductBlackList)
 class ProductController extends Controller {
   async addProduct(req, res, next) {
     try {
@@ -46,7 +58,23 @@ class ProductController extends Controller {
   }
   async updateProduct(req, res, next) {
     try {
+      const { id } = req.params;
+      const product = await this.findProductById(id);
+      const data=copyObject(req.body);
+      data.images=ListOfImagesFromRequest(req.files,req.body.fileUploadPath);
+      data.features=setFeatures(req.body);  
+      let blackListFields = Object.values(ProductBlackList);
+      checkDataForUpdate(data, blackListFields)
+      const updateProductResult = await ProductModel.updateOne({ _id: product._id }, { $set: data })
+      if (updateProductResult.modifiedCount == 0) throw { status: HttpStatus.INTERNAL_SERVER_ERROR, message: "خطای داخلی" }
+      return res.status(StatusCodes.OK).json({
+        data : {
+          statusCode: StatusCodes.OK,
+          message: "The product has been updated!"
+        }
+      })
     } catch (error) {
+      deleteFileInPublic(req.body.image)
       next(error);
     }
   }
