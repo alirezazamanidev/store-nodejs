@@ -6,7 +6,7 @@ const episodeSchema=new mongoose.Schema({
     text:{type:String,default:''},
     type:{type:String,default:'unlock'},
     time:{type:String,required:true},
-    videoUrl:{type:String,required:true}
+    videoAddress:{type:String,required:true}
 
 })
 const chapterSchema=new mongoose.Schema({

@@ -140,7 +140,7 @@ class BlogController extends Controller {
       }
       const data = req.body;
      
-      let blackListField = ["bookmarks", "comments", "likes", "dislikes"];
+      let blackListField = ["bookmarks", "comments", "likes", "dislikes",'teacher'];
       checkDataForUpdate(data,blackListField);
 
       const resultUpdate = await BlogModel.updateOne({_id:id},{$set:data});

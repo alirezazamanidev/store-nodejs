@@ -12,6 +12,7 @@ const {
   deleteFileInPublic,
   checkDataForUpdate,
   getTime,
+  copyObject,
 } = require("../../../../utils/functions");
 const { CourseModel } = require("../../../../models/course");
 const { ObjectIdValidator } = require("../../../validators/public.validator");
@@ -32,7 +33,7 @@ class EpisodeController extends Controller {
              text,
              time,
              type:'unlock',
-            videoUrl:videoAddress,
+             videoAddress
 
           }
         }
@@ -74,6 +75,56 @@ class EpisodeController extends Controller {
       next(error);
     }
   }
+  async updateEpisode(req, res, next) {
+    try {
+         const {episodeId} = req.params
+        const episode = await this.getOneEpisode(episodeId);
+        const { filename, fileUploadPath } = req.body
+        let blackListFields = ["_id"]
+        if(filename && fileUploadPath){
+            const fileAddress = path.join(fileUploadPath, filename)
+            req.body.videoAddress = fileAddress.replace(/\\/g, "/");
+            
+            const seconds = await getVideoDurationInSeconds(req.file.path);
+            req.body.time = getTime(seconds);
+            blackListFields.push("filename")
+            blackListFields.push("fileUploadPath")
+        }else{
+            blackListFields.push("time")
+            blackListFields.push("videoAddress")
+        }
+        const data = req.body;
+        checkDataForUpdate(data, blackListFields)
+        const newEpisode = {
+            ...episode,
+            ...data
+        }
+        const editEpisodeResult = await CourseModel.updateOne({
+            "chapters.episodes._id": episodeId
+        }, {
+            $set: {
+                "chapters.$.episodes": newEpisode
+            }
+        })
+        if (!editEpisodeResult.modifiedCount)
+            throw new createHttpError.InternalServerError("ویرایش اپیزود انجام نشد")
+        return res.status(HttpStatus.OK).json({
+            statusCode: HttpStatus.OK,
+            data: {
+                message: "ویرایش اپیزود با موفقیت انجام شد"
+            }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+async getOneEpisode(episodeID){
+    const course = await CourseModel.findOne({"chapters.episodes._id": episodeID})
+    if(!course) throw new createHttpError.NotFound("اپیزودی یافت نشد")
+    const episode = await course?.chapters?.[0]?.episodes?.[0]
+    if(!episode) throw new createHttpError.NotFound("اپیزودی یافت نشد")
+    return copyObject(episode)
+}
 }
 
 module.exports = {
