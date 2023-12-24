@@ -40,21 +40,27 @@ const storage = multer.diskStorage({
     cb(null,null);
   },
 });
-function fileFilter(req,file,cb){
-    const ext = path.extname(file.originalname);
-    const mimetypes = [".mp4",'.jpg', ".mpg", ".mov", ".avi", ".mkv"];
-    if (mimetypes.includes(ext)) {
-      return cb(null, true);
-    }
-    return cb(createHttpError.BadRequest("فرمت ارسال شده تصویر صحیح نمیباشد"));
+function fileFilter(req, file, cb) {
+  const ext = path.extname(file.originalname);
+  const mimetypes = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+  if (mimetypes.includes(ext)) {
+    return cb(null, true);
+  }
+  return cb(createError.BadRequest("فرمت ارسال شده تصویر صحیح نمیباشد"));
 }
-const UploadFile = multer({
-  storage,
-  limits:{fileSize:(5*1000*1000)},
-  fileFilter
-});
-
+function videoFilter(req, file, cb) {
+  const ext = path.extname(file.originalname);
+  const mimetypes = [".mp4", ".mpg", ".mov", ".avi", ".mkv"];
+  if (mimetypes.includes(ext)) {
+    return cb(null, true);
+  }
+  return cb(createError.BadRequest("فرمت ارسال شده ویدیو صحیح نمیباشد"));
+}
+const pictureMaxSize = 1 * 1000 * 1000;//300MB
+const videoMaxSize = 300 * 1000 * 1000;//300MB
+const uploadFile = multer({ storage, fileFilter, limits: { fileSize: pictureMaxSize } }); 
+const uploadVideo = multer({ storage, videoFilter, limits: { fileSize: videoMaxSize } }); 
 module.exports = {
-  UploadFile,
-
+  uploadFile,
+  uploadVideo
 };

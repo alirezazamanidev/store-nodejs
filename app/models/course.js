@@ -1,9 +1,10 @@
 const mongoose=require('mongoose');
 const { commentSchema } = require('./public');
 const episodeSchema=new mongoose.Schema({
+    
     title:{type:String,required:true},
     text:{type:String,default:''},
-    type:{type:String,default:'free'},
+    type:{type:String,default:'unlock'},
     time:{type:String,required:true},
 
 })
@@ -32,7 +33,7 @@ const Schema=new mongoose.Schema({
     time:{type:String,default:'00:00:00'},
     teacher:{type:mongoose.Schema.ObjectId,ref:'user',required:true},
     students:{type:[mongoose.Types.ObjectId],ref:'user',default:[]}
-});
+},{timestamps:true,toJSON:{virtuals:true}});
 Schema.index({title:"text",short_text:"text",text:"text"});
 module.exports= {
     CourseModel:mongoose.model('Course',Schema)

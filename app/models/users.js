@@ -17,7 +17,7 @@ const Schema=new mongoose.Schema({
     Roles:{type:[String],default:['User']},
     courses:{type:[mongoose.Types.ObjectId],ref:'Course',default:[]}
 
-})
+},{timestamps:true,toJSON:{virtuals:true}})
 module.exports= {
     UserModel:mongoose.model('user',Schema)
 }
