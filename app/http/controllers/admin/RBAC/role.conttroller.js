@@ -2,9 +2,11 @@ const { RoleModel } = require("../../../../models/role")
 const Controller = require("./../../controller");
 const {StatusCodes: HttpStatus} = require("http-status-codes")
 const createHttpError = require("http-errors");
-const { addRoleSchema } = require("../../../validators/admin/RBAC.schema");
+
 const { default: mongoose } = require("mongoose");
-const { copyObject, deleteInvalidPropertyInObject } = require("../../../../utils/functions");
+const { addRoleSchema } = require("../../../validators/admin/RBAC.schema");
+const { copyObject, checkDataForUpdate } = require("../../../../utils/functions");
+
 class RoleControlller extends Controller {
     async getAllRoles(req,res, next){
         try {
@@ -56,7 +58,7 @@ class RoleControlller extends Controller {
             const {id} = req.params;
             const role = await this.findRoleWithIdOrTitle(id)
             const data = copyObject(req.body)
-            deleteInvalidPropertyInObject(data, [])
+            checkDataForUpdate(data, [])
             const updateRoleResult = await RoleModel.updateOne({_id : role._id}, {
                 $set: data
             });

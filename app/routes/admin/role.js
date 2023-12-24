@@ -1,4 +1,5 @@
-const { RoleController } = require("../../http/controllers/admin/RBAC/role.controller")
+
+const { RoleController } = require("../../http/controllers/admin/RBAC/role.conttroller")
 const { stringToArray } = require("../../http/middlewares/stringToArray")
 
 const router = require("express").Router()

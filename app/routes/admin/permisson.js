@@ -1,4 +1,4 @@
-const { PermissionControlller } = require("../../http/controllers/admin/RBAC/permission.controller")
+const { PermissionControlller } = require("../../http/controllers/admin/RBAC/permisson.conttroller")
 
 const router = require("express").Router()
 router.get("/list", PermissionControlller.getAllPermissions)
