@@ -7,7 +7,7 @@ const Controller = require("../../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 const path = require("path");
 const mongoose = require("mongoose");
-const { deleteFileInPublic } = require("../../../../utils/functions");
+const { deleteFileInPublic, copyObject, checkDataForUpdate } = require("../../../../utils/functions");
 class CourseController extends Controller {
   async addCourse(req, res, next) {
     try {
@@ -120,6 +120,33 @@ class CourseController extends Controller {
     if (!course) throw createHttpError.NotFound("The course not founded!");
     return course;
   }
+  async updateCourseById(req, res, next){
+    try {
+        const {id} = req.params;
+        const course = await this.findCourseById(id)
+        const data = copyObject(req.body);
+        const {filename, fileUploadPath} = req.body;
+        let blackListFields = ["time", "chapters", "episodes", "students", "bookmarks", "likes", "dislikes", "comments", "fileUploadPath", "filename"]
+        checkDataForUpdate(data, blackListFields)
+        if(req.file){
+            data.image = path.join(fileUploadPath, filename)
+            deleteFileInPublic(course.image)
+        }
+        const updateCourseResult = await CourseModel.updateOne({_id: id}, {
+            $set: data
+        })
+        if(!updateCourseResult.modifiedCount) throw new createHttpError.InternalServerError("به روزرسانی دوره انجام نشد") 
+
+        return res.status(HttpStatus.OK).json({
+            statusCode: HttpStatus.OK,
+            data: {
+                message: "به روزرسانی دوره با موفقیت انجام شد"
+            }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 }
 
 module.exports = {
