@@ -3,9 +3,9 @@ const { AdminApiCategoryRouter } = require('./category');
 const { AdminApiChapterRoutes } = require('./chapter');
 const { AdminApiCourseRoutes } = require('./course');
 const { AdminApiEpisodeRoutes } = require('./episode');
-const { AdminApiPermisonRoutes } = require('./permisson');
+const { AdminApiPermissionRouter } = require('./permisson');
 const { AdminApiProductRoutes } = require('./produnct');
-const { AdminApiRoleRoutes } = require('./role');
+const { AdminApiRoleRouter } = require('./role');
 const { AdminApiUserRoutes } = require('./user');
 
 
@@ -19,8 +19,8 @@ router.use('/courses',AdminApiCourseRoutes);
 router.use('/chapter',AdminApiChapterRoutes);
 router.use('/episode',AdminApiEpisodeRoutes);
 router.use('/user',AdminApiUserRoutes);
-router.use('/role',AdminApiRoleRoutes);
-router.use('/permission',AdminApiPermisonRoutes);
+router.use('/role',AdminApiRoleRouter);
+router.use('/permission',AdminApiPermissionRouter);
 module.exports={
     AdminRoutes:router
 }
