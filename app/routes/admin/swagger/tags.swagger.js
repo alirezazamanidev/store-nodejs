@@ -7,6 +7,8 @@
  *          description : management product routes
  *      -   name: Course(AdminPanel)
  *          description : management Course routes
+ *      -   name: Chapter(AdminPanel)
+ *          description : management Chapter routes
  *      -   name: Blog(AdminPanel)
  *          description: made blog managment admin panel 
  *      -   name: Category(AdminPanel)

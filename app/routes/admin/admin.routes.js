@@ -12,7 +12,7 @@ router.use('/category',AdminApiCategoryRouter)
 router.use('/blogs',AdminApiBlogRoutes);
 router.use('/products',AdminApiProductRoutes)
 router.use('/courses',AdminApiCourseRoutes);
-router.use('/chapters',AdminApiChapterRoutes);
+router.use('/chapter',AdminApiChapterRoutes);
 module.exports={
     AdminRoutes:router
 }
