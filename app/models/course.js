@@ -7,7 +7,9 @@ const episodeSchema=new mongoose.Schema({
     type:{type:String,default:'unlock'},
     time:{type:String,required:true},
     videoAddress:{type:String,required:true}
-
+})
+episodeSchema.virtual("videoURL").get(function(){
+    return `${process.env.BASE_URL}:${process.env.PORT}/${this.videoAddress}`
 })
 const chapterSchema=new mongoose.Schema({
     title:{type:String,required:true},
@@ -36,6 +38,9 @@ const Schema=new mongoose.Schema({
     students:{type:[mongoose.Types.ObjectId],ref:'user',default:[]}
 },{timestamps:true,toJSON:{virtuals:true}});
 Schema.index({title:"text",short_text:"text",text:"text"});
+Schema.virtual('imageUrl').get(function(){
+    return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`;
+})
 module.exports= {
     CourseModel:mongoose.model('Course',Schema)
 }
