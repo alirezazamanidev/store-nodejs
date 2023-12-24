@@ -14,6 +14,7 @@ const {
   getTime,
 } = require("../../../../utils/functions");
 const { CourseModel } = require("../../../../models/course");
+const { ObjectIdValidator } = require("../../../validators/public.validator");
 class EpisodeController extends Controller {
   async addEpisode(req, res, next) {
     try {
@@ -43,6 +44,32 @@ class EpisodeController extends Controller {
           message:'The episode has been created!'
         }
       });
+    } catch (error) {
+      // deleteFileInPublic(videoAddress);
+      next(error);
+    }
+  }
+  async removeOneEpisode(req,res,next){
+    try {
+      const {id:episodeId}=await ObjectIdValidator.validateAsync({id:req.params.episodeId});
+
+      const removeEpisodeResult=await CourseModel.updateOne({
+        'chapters.episodes._id':episodeId
+
+      },{
+        $pull:{
+          'chapters.$.episodes':{
+            _id:episodeId
+          }
+        }
+      });
+      if(removeEpisodeResult.modifiedCount==0) throw createHttpError.InternalServerError();
+      return res.status(HttpStatus.OK).json({
+        data:{
+          statuasCode:HttpStatus.OK,
+          message:"The Episode has been removed!"
+        }
+      })
     } catch (error) {
       next(error);
     }
