@@ -1,8 +1,9 @@
-const { ChapterController } = require('../../http/controllers/admin/course/chapter.controller');
+
 const { EpisodeController } = require('../../http/controllers/admin/course/episode.controller');
+const {UploadVideo  } = require('../../utils/multer');
 const router=require('express').Router()
 
-router.post('/add',EpisodeController.addEpisode);
+router.post('/add',UploadVideo.single('video'),EpisodeController.addEpisode);
 module.exports={
     AdminApiEpisodeRoutes:router
 }

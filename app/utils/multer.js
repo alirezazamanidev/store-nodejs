@@ -1,43 +1,44 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const createHttpError = require("http-errors");
+const createError = require("http-errors");
 function createRoute(req) {
   const date = new Date();
-  let year = date.getFullYear().toString();
-  let month = date.getMonth().toString();
-  let day = date.getDay().toString();
-  req.body.fileUploadPath = path.join("uploads", "blogs", year, month, day);
-  const dir = path.join(
+  const year = date.getFullYear().toString();
+  const month = date.getMonth().toString();
+  const day = date.getDate().toString();
+  const directory = path.join(
     __dirname,
-    `..`,
     "..",
-    `public`,
+    "..",
+    "public",
     "uploads",
     "blogs",
     year,
     month,
     day
   );
-  fs.mkdirSync(dir, { recursive: true });
-  return dir;
+  req.body.fileUploadPath = path.join("uploads", "blogs", year, month, day);
+  fs.mkdirSync(directory, { recursive: true });
+  return directory;
 }
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if(file?.originalname){
+
+    if (file?.originalname) {
       const filePath = createRoute(req);
-      return  cb(null, filePath);
+      return cb(null, filePath);
     }
-    cb(null,null);
+    cb(null, null);
   },
   filename: (req, file, cb) => {
-    if(file?.originalname){
+    if (file.originalname) {
       const ext = path.extname(file.originalname);
       const fileName = String(new Date().getTime() + ext);
-      req.body.filename=fileName;
+      req.body.filename = fileName;
       return cb(null, fileName);
     }
-    cb(null,null);
+    cb(null, null);
   },
 });
 function fileFilter(req, file, cb) {
@@ -58,9 +59,9 @@ function videoFilter(req, file, cb) {
 }
 const pictureMaxSize = 1 * 1000 * 1000;//300MB
 const videoMaxSize = 300 * 1000 * 1000;//300MB
-const uploadFile = multer({ storage, fileFilter, limits: { fileSize: pictureMaxSize } }); 
-const uploadVideo = multer({ storage, videoFilter, limits: { fileSize: videoMaxSize } }); 
+const UploadFile = multer({ storage,fileFilter:fileFilter, limits: { fileSize: pictureMaxSize } }); 
+const UploadVideo = multer({ storage,fileFilter:videoFilter, limits: { fileSize: videoMaxSize } }); 
 module.exports = {
-  uploadFile,
-  uploadVideo
+  UploadFile,
+  UploadVideo
 };

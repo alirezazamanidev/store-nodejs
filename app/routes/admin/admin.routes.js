@@ -14,7 +14,7 @@ router.use('/blogs',AdminApiBlogRoutes);
 router.use('/products',AdminApiProductRoutes)
 router.use('/courses',AdminApiCourseRoutes);
 router.use('/chapter',AdminApiChapterRoutes);
-router.use('/episodes',AdminApiEpisodeRoutes);
+router.use('/episode',AdminApiEpisodeRoutes);
 module.exports={
     AdminRoutes:router
 }

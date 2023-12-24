@@ -73,7 +73,9 @@ if(fs.existsSync(pathFile)) fs.unlinkSync(pathFile)
 }
 function getTime(seconds) {
     let total = Math.round(seconds) / 60;
+  
     let [minutes, percent] = String(total).split(".");
+    console.log(minutes,percent);
     let second = Math.round((percent * 60) / 100).toString().substring(0, 2);
     let houre = 0;
     if (minutes > 60) {

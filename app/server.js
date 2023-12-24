@@ -7,6 +7,9 @@ const { AllRoutes } = require("./routes/router");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const morgan = require("morgan");
+const cors=require('cors');
+const {config}=require('dotenv');
+config();
 module.exports = class Application {
   #app = express();
   #PORT;
@@ -23,6 +26,7 @@ module.exports = class Application {
   }
 
   configApplication() {
+    this.#app.use(cors());
     this.#app.use(morgan("dev"));
     this.#app.use(express.json());
     this.#app.use(express.urlencoded({ extended: true }));
