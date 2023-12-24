@@ -34,7 +34,6 @@ const Schema=new mongoose.Schema({
     disCount:{type:Number,default:0},
     type:{type:String,default:'free'}, // free or cash
     status:{type:String,default:'notStarted' /*notStarted,complated,holding */},
-    time:{type:String,default:'00:00:00'},
     teacher:{type:mongoose.Schema.ObjectId,ref:'user',required:true},
     students:{type:[mongoose.Types.ObjectId],ref:'user',default:[]}
 },{timestamps:true,toJSON:{virtuals:true}});

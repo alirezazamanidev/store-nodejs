@@ -1,13 +1,12 @@
 const createHttpError = require("http-errors");
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const {
-  createCourseSchema,
   createEpisodeSchema,
 } = require("../../../validators/admin/course.schrma");
 const Controller = require("../../controller");
-const { StatusCodes: HttpStatus, RESET_CONTENT } = require("http-status-codes");
+const { StatusCodes: HttpStatus } = require("http-status-codes");
 const path = require("path");
-const mongoose = require("mongoose");
+
 const {
   deleteFileInPublic,
   checkDataForUpdate,
