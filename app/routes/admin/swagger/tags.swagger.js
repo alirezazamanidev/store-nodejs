@@ -5,6 +5,9 @@
  *          description : action of admin (add, remove, edit  and any do)
  *      -   name: Users(AdminPanel)
  *          description : management users routes
+ *      
+ *      -   name : RBAC(AdminPanel)
+ *          description : RoleBaseAccessControll System create and manage role and permissions 
  *      -   name: Product(AdminPanel)
  *          description : management product routes
  *      -   name: Course(AdminPanel)

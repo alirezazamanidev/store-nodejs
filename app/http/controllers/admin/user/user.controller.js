@@ -1,4 +1,5 @@
 const { UserModel } = require("../../../../models/users");
+const { checkDataForUpdate } = require("../../../../utils/functions");
 const Controller = require("../../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 
@@ -20,6 +21,25 @@ class UserController extends Controller {
             
         } catch (error) {
             next(error);
+        }
+    }
+
+    async updateUserProfile(req, res, next){
+        try {
+            const userID = req.user._id;
+            const data = req.body;
+            const BlackListFields = ["mobile", "otp", "bills", "discount", "Roles", "Courses"]
+            checkDataForUpdate(data, BlackListFields)
+            const profileUpdateResult = await UserModel.updateOne({_id: userID}, { $set: data })
+            if(!profileUpdateResult.modifiedCount) throw new createHttpError.InternalServerError("به روزسانی انجام نشد")
+            return res.status(HttpStatus.OK).json({
+                statusCode: HttpStatus.OK,
+                data: {
+                    message: "به روزرسانی پروفایل با موفقیت انجام شد"
+                }
+            })
+        } catch (error) {
+            next(error)
         }
     }
 
