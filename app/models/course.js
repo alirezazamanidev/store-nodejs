@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const { commentSchema } = require('./public');
+const { getTimeOfCourse } = require('../utils/functions');
 const episodeSchema=new mongoose.Schema({
     
     title:{type:String,required:true},
@@ -40,6 +41,9 @@ const Schema=new mongoose.Schema({
 Schema.index({title:"text",short_text:"text",text:"text"});
 Schema.virtual('imageUrl').get(function(){
     return `${process.env.BASE_URL}:${process.env.PORT}/${this.image}`;
+});
+Schema.virtual('totalTime').get(function(){
+    return getTimeOfCourse(this.chapters || []);
 })
 module.exports= {
     CourseModel:mongoose.model('Course',Schema)

@@ -10,5 +10,5 @@ router.post('/add',UploadFile.single('image'),stringToArray('tags'),CourseContro
 router.get('/:id',CourseController.getOneCourseById) // get one course by id
 router.patch('/update/:id',UploadFile.single('image'),stringToArray('tags'),CourseController.updateCourseById)
 module.exports={
-    AdminApiCourseRoutes:router
+    AdminApiCourseRoutes :router
 }
