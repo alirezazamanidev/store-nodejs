@@ -111,11 +111,11 @@ class ChapterController extends Controller {
   async chaptersOfCourse(req, res, next) {
     try {
       const {id}=req.params;
-      const chapters=await this.GetChapterOfCourse(id);
+      const courses=await this.GetChapterOfCourse(id);
       return res.status(HttpStatus.OK).json({
         data:{
           statusCode:HttpStatus.OK,
-          chapters
+           courses
         }
       })
     } catch (err) {
@@ -128,6 +128,34 @@ class ChapterController extends Controller {
     
 
     if(!chapters) throw createHttpError.NotFound("The course not founded!");
+    return chapter;
+  }
+  async removeChapterById(req,res,next){
+    try {
+      const {chapterId}=req.params;
+      const chapter=await this.getOneChapter(id);
+      const removeChapterResult=await CourseModel.updateOne({'chapters._id':id},{
+        $pull:{
+          chapters:{
+            _id:chapterId
+          }
+        }
+      })
+      if(removeChapterResult.modifiedCount==0) throw createHttpError.InternalServerError();
+      return res.status(HttpStatus.OK).json({
+        data:{
+          statusCode:HttpStatus.OK,
+          message:"The chapter has been deleted!"
+        }
+      })
+    } catch (error) {
+      next(error)
+    }
+
+  }
+  async getOneChapter(chapterId){
+    const chapter=await CourseModel.findOne({"chapters._id":chapterId},{'chapters.$':1});
+    if(!chapter) throw createHttpError.NotFound('chapter is not founded!');
     return chapter;
   }
 }
