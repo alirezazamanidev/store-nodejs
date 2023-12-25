@@ -1,5 +1,17 @@
 const mongoose=require('mongoose');
 
+const productSchema=new mongoose.Schema({
+    productId:{type:mongoose.Types.ObjectId,ref:"product"},
+    count:{type:Number,default:1},
+});
+const courseSchema=new mongoose.Schema({
+    courseId:{type:mongoose.Types.ObjectId,ref:"Course"},
+    count:{type:Number,default:1},
+});
+const basketSchema=new mongoose.Schema({
+    course:{type:[courseSchema],default:[]},
+    product:{type:[productSchema],default:[]}
+})
 const Schema=new mongoose.Schema({
     first_name:{type:String},
     last_name:{type:String},
@@ -15,7 +27,8 @@ const Schema=new mongoose.Schema({
     diacount:{type:Number,default:0},
     birthDay:{type:String},
     Role:{type:String,default:'User'},
-    courses:{type:[mongoose.Types.ObjectId],ref:'Course',default:[]}
+    courses:{type:[mongoose.Types.ObjectId],ref:'Course',default:[]},
+    basket:{type:basketSchema}
 
 },{timestamps:true,toJSON:{virtuals:true}});
 
