@@ -7,10 +7,17 @@ const ProductResolver = {
   args: {
     category: { type: GraphQLString },
   },
-  resolve: async (_,args) => {
+  resolve: async (_, args) => {
     const { category } = args;
     const findQuery = category ? { category } : {};
-    const products = await ProductModel.find(findQuery).populate([{path:'category'},{path:"supllier"}])
+    const products = await ProductModel.find(findQuery).populate([
+      { path: "category" },
+      { path: "supllier" },
+      { path: "comments.user" },
+      {
+        path: "comments.answer.user",
+      },
+    ]);
 
     return products;
   },
