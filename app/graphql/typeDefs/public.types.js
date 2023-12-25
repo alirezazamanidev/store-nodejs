@@ -1,7 +1,7 @@
 const {GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLScalarType, Kind, GraphQLList, }=require('graphql');
 const { toObject, parseLiteral } = require('../utils');
-const AuthorType=new GraphQLObjectType({
-    name:'AuthorType',
+const UserType=new GraphQLObjectType({
+    name:'UserType',
     fields:{
         _id:{type:GraphQLString},
         first_name:{type:GraphQLString},
@@ -23,8 +23,16 @@ const AnyType = new GraphQLScalarType({
     serialize : toObject,
     parseLiteral : parseLiteral,
 })
+
+const ResponseType=new GraphQLObjectType({
+    name:'ResponseType',
+    fields:{
+       data:{type:AnyType}
+    }
+   })
 module.exports={
-    AuthorType,
+    UserType,
     AnyType,
+    ResponseType,
     PublicCategoryType
 }
