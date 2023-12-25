@@ -32,19 +32,7 @@ function VerifyAccessToken(req, res, next) {
       next(error);
     }
   }
-function chekRole(role){
 
-  return function(req,res,next){
-    try {
-      const user=req.user;
-      if(user.Roles.includes(role)) return next();
-      throw createHttpError.Forbidden('Access deind!');
-    } catch (error) {
-      next(error)
-    }
-  }
-}
 module.exports={
     VerifyAccessToken,
-    chekRole
 }

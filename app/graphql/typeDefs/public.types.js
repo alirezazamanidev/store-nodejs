@@ -8,7 +8,15 @@ const AuthorType=new GraphQLObjectType({
        
     }
 })
+const CategoryType=new GraphQLObjectType({
+    name:'CategoryType',
+    fields:{
+        _id:{type:GraphQLString},
+        title:{type:GraphQLString}
+    }
+})
 
 module.exports={
-    AuthorType
+    AuthorType,
+    CategoryType
 }

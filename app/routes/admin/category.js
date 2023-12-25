@@ -2,7 +2,7 @@ const { CategoryController } = require("../../http/controllers/admin/category/ca
 
 const router = require("express").Router();
 
-router.post('/create',CategoryController.addCategory);
+router.post('/add',CategoryController.addCategory);
 
 router.get('/parents',CategoryController.getAllParents);
 router.get('/childern/:parent',CategoryController.getChildParent);

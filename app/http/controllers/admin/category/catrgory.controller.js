@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 class CategoryController extends Controller {
   async addCategory(req, res, next) {
     try {
+
       await categorySchema.validateAsync(req.body);
       const { title, parent } = req.body;
       const newCategory = await CategoryModel.create({ title, parent });
