@@ -31,8 +31,8 @@ const Schema=new mongoose.Schema({
     bookmark:{type:[mongoose.Types.ObjectId] ,default:[]},
     price:{type:Number,default:0},
     chapters:{type:[chapterSchema],default:[]},
-    disCount:{type:Number,default:0},
-    type:{type:String,default:'free'}, // free or cash
+    disCunt:{type:Number,default:0},
+    typoe:{type:String,default:'free'}, // free or cash
     status:{type:String,default:'notStarted' /*notStarted,complated,holding */},
     teacher:{type:mongoose.Schema.ObjectId,ref:'user',required:true},
     students:{type:[mongoose.Types.ObjectId],ref:'user',default:[]}
