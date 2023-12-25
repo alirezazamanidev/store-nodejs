@@ -1,4 +1,4 @@
-const {GraphQLObjectType, GraphQLString, }=require('graphql');
+const {GraphQLObjectType, GraphQLString, GraphQLInt, }=require('graphql');
 const AuthorType=new GraphQLObjectType({
     name:'AuthorType',
     fields:{

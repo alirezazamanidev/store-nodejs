@@ -25,12 +25,13 @@ class ProductController extends Controller {
     try {
     
       const images=ListOfImagesFromRequest(req.files || [],req.body.fileUploadPath);
-
+      console.log(images);
       const productBody = await createProductSchema.validateAsync(req.body);
-      const { title, text, short_text, category, tags, count, price, discount, type } = productBody;
+      const { title, text, short_text, category, tags, count, price,colors, discount, type } = productBody;
       const supplier = req.user._id;
       let features = setFeatures(req.body)
        await ProductModel.create({
+        supllier:supplier,
         title,
         text,
         short_text,
@@ -42,6 +43,7 @@ class ProductController extends Controller {
         images,
         features,
         supplier,
+       
         type
       })
       return res.status(StatusCodes.CREATED).json({

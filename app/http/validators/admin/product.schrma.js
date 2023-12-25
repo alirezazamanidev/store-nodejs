@@ -14,6 +14,7 @@ const createProductSchema = Joi.object({
     weight: Joi.number().allow(null, 0, "0").error(createError.BadRequest("وزن وارد شده صحیح نمیباشد")),
     length: Joi.number().allow(null, 0, "0").error(createError.BadRequest("طول وارد شده صحیح نمیباشد")),
     height: Joi.number().allow(null, 0, "0").error(createError.BadRequest("ارتفاع وارد شده صحیح نمیباشد")),
+    colors:Joi.allow(),
     width: Joi.number().allow(null, 0, "0").error(createError.BadRequest("عرض وارد شده صحیح نمیباشد")),
     type: Joi.string().regex(/(virtual|phisical)/i),
     filename: Joi.string().regex(/(\.png|\.jpg|\.webp|\.jpeg|\.gif)$/).error(createError.BadRequest("تصویر ارسال شده صحیح نمیباشد")),

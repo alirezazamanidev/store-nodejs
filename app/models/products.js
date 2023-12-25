@@ -18,9 +18,9 @@ const Schema=new mongoose.Schema({
     disCount:{type:Number,default:0},
     type:{type:String,required:true}, // virtual or video
     time:{type:String},
-    supllier:{type:mongoose.Schema.ObjectId},
+    supllier:{type:mongoose.Schema.ObjectId,ref:'user',required:true},
     format:{type:String},
-    feture:{type:Object,default:{
+    features:{type:Object,default:{
         length:"",
         height:"",
         width:"",
