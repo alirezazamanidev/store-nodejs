@@ -9,7 +9,7 @@ const Schema = new mongoose.Schema({
   text: { type: String, required: true },
   image: { type: String, required: true },
   tags: { type: [String] ,default:[]},
-  category: { type:[ mongoose.Types.ObjectId],ref:'Category', required: true },
+  category: { type: mongoose.Types.ObjectId,ref:'Category', required: true },
   comments:{type:[commentSchema],default:[]},
   likes:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},
   dislikes:{type:[mongoose.Types.ObjectId],ref:'user' ,default:[]},

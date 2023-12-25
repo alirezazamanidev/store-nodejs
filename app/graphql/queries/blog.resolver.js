@@ -4,10 +4,14 @@ const { BlogType } = require("../typeDefs/blog.type");
 
 const BlogResolver = {
   type: new GraphQLList(BlogType),
-  resolve: async() => {
-    return await BlogModel.find({}).populate([{path:'author'},{path:'category'}])
+  resolve: async () => {
+    const blogs = await BlogModel.find({}).populate([
+      { path: "author" },
+      { path: "category", select: ["title"] },
+    ]);
+    return blogs;
   },
 };
-module.exports={
-    BlogResolver
-}
+module.exports = {
+  BlogResolver,
+};

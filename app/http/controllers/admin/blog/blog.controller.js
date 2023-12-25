@@ -28,7 +28,7 @@ class BlogController extends Controller {
         data: {
           statusCode: 201,
           meessage: "Blog has been created!",
-          newblog,
+          
         },
       });
     } catch (error) {
