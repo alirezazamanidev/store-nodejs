@@ -1,11 +1,16 @@
-const { GraphQLList } = require("graphql");
+const { GraphQLList, GraphQLString } = require("graphql");
 const { CourseModel } = require("../../models/course");
 const { CourseType } = require("../typeDefs/course.type");
 
 const CourseResolver = {
   type: new GraphQLList(CourseType),
-  resolve: async () => {
-    const courses=await CourseModel.find({}).populate([{path:'teacher'},{path:'category'}]);
+  args: {
+    category: { type: GraphQLString },
+  },
+  resolve: async (_,args) => {
+    const { category } = args;
+    const findQuery = category ? { category } : {};
+    const courses=await CourseModel.find(findQuery).populate([{path:'teacher'},{path:'category'}]);
     return courses;
   },
 };
