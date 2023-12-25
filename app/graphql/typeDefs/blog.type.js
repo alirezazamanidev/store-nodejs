@@ -14,6 +14,10 @@ const BlogType=new GraphQLObjectType({
         comments:{type:new GraphQLList(CommentType)},
         tags:{type:new GraphQLList(GraphQLString)},
         title:{type:GraphQLString},
+        likes : {type: new GraphQLList(UserType)},
+        dislikes : {type: new GraphQLList(UserType)},
+        bookmarks : {type: new GraphQLList(UserType)},
+
         category:{type:PublicCategoryType},
     }
 })

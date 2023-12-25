@@ -19,6 +19,15 @@ const BlogResolver = {
       {
         path: "comments.answers.user",
       },
+      {
+        path: "likes",
+      },
+      {
+        path: "disLikes",
+      },
+      {
+        path:"bookmarks"
+      }
     ]);
     return blogs;
   },
