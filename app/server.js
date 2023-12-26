@@ -8,6 +8,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const morgan = require("morgan");
 const cors=require('cors');
+const ExpressEjsLayouts=require('express-ejs-layouts');
 const {config}=require('dotenv');
 config();
 module.exports = class Application {
@@ -18,6 +19,7 @@ module.exports = class Application {
     this.#PORT = PORT;
     this.#DB_URI = DB_URI;
     this.configApplication();
+    this.Init_TemplateEngine();
     this.createServer();
     this.connectToMongoDb();
     this.createRoutes();
@@ -30,7 +32,7 @@ module.exports = class Application {
     this.#app.use(morgan("dev"));
     this.#app.use(express.json());
     this.#app.use(express.urlencoded({ extended: true }));
-    this.#app.use(express.static(path.join(__dirname + ".." + "public")));
+    this.#app.use(express.static(path.join(__dirname, "..", "public")));
     this.#app.use(
       "/api-doc",
       swaggerUi.serve,
@@ -76,7 +78,6 @@ module.exports = class Application {
       console.log(`run > http://localhost:${this.#PORT}`);
     });
   }
-
   connectToMongoDb() {
     mongoose
       .connect(this.#DB_URI)
@@ -98,6 +99,15 @@ module.exports = class Application {
   Init_redis(){
     require('./utils/init_redis');
   }
+  Init_TemplateEngine(){
+    this.#app.use(ExpressEjsLayouts)
+    this.#app.set("view engine", "ejs");
+    this.#app.set("views", "resource/views");
+    this.#app.set("layout extractStyles", true);
+    this.#app.set("layout extractScripts", true);
+    this.#app.set('layout','./layouts/master')
+  }
+
   createRoutes() {
     this.#app.use(AllRoutes);
   }

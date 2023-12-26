@@ -7,12 +7,14 @@ const { UserAuthRoutes } = require('./user/auth');
 const { graphqlConfig } = require('../utils/graphql.config');
 const { graphqlHTTP } = require('express-graphql');
 const { HomeRoutes } = require('./api');
+const { SupportRouter } = require('./support/support.router');
 const router=require('express').Router()
 
 router.use('/user',UserAuthRoutes);
 router.use('/developer',DeveloperRouter);
 router.use('/admin',VerifyAccessToken,AdminRoutes);
 router.use('/graphql',graphqlHTTP(graphqlConfig));
+router.use('/support',SupportRouter);
 router.use('/',HomeRoutes);
 module.exports={
     AllRoutes:router
