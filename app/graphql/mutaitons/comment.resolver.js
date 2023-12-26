@@ -11,6 +11,7 @@ const { copyObject } = require("../../utils/functions");
 const mongoose = require("mongoose");
 const { CourseModel } = require("../../models/course");
 const { ProductModel } = require("../../models/products");
+const { checkExixtBlog, checkExixtCourse, checkExixtProduct } = require("../utils");
 const CreateCommentForBlog = {
     type: ResponseType,
     args : {
@@ -67,11 +68,7 @@ const CreateCommentForBlog = {
     }
 }
 
-async function checkExixtBlog(id) {
-  const blog = await BlogModel.findById(id);
-  if (!blog) throw createHttpError.NotFound("Blog is not founded");
-  return blog;
-}
+
 const CreateCommentForCourse = {
     type: ResponseType,
     args : {
@@ -127,11 +124,7 @@ const CreateCommentForCourse = {
         }
     }
 }
-async function checkExixtCourse(id) {
-    const course = await CourseModel.findById(id);
-    if (!course) throw createHttpError.NotFound("course is not founded");
-    return course;
-  }
+
   const CreateCommentForProduct = {
     type: ResponseType,
     args : {
@@ -187,11 +180,7 @@ async function checkExixtCourse(id) {
         }
     }
 }
-async function checkExixtProduct(id) {
-    const product = await ProductModel.findById(id);
-    if (!product) throw createHttpError.NotFound("product is not founded");
-    return product;
-  }
+
 async function getComment(model, id) {
   const findedComment = await model.findOne(
     { "comments._id": id },
