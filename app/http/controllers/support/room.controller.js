@@ -9,14 +9,14 @@ class RoomController extends Controller {
     try {
       const { name, description, filename, fileUploadPath, namespace } =
         req.body;
-        await this.findcoversartionByEndpoint(namespace);
+      await this.findcoversartionByEndpoint(namespace);
       await this.findRoomByName(name);
       const image = path.join(fileUploadPath, filename).replace(/\\/g, "/");
       const room = { name, description, image };
-      console.log(room);
+
       const UpdateconversationResult = await ConverSationModel.updateOne(
         { endpoint: namespace },
-        { $push: {rooms:room} }
+        { $push: { rooms: room } }
       );
       if (UpdateconversationResult.modifiedCount == 0)
         throw createHttpError.InternalServerError();

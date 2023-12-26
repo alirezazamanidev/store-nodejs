@@ -7,9 +7,12 @@ const { AllRoutes } = require("./routes/router");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const morgan = require("morgan");
-const cors=require('cors');
-const ExpressEjsLayouts=require('express-ejs-layouts');
-const {config}=require('dotenv');
+const cors = require("cors");
+const ExpressEjsLayouts = require("express-ejs-layouts");
+const { config } = require("dotenv");
+const { initialSocket } = require("./utils/init_socket.io");
+const { socketHandler } = require("./socket.io");
+
 config();
 module.exports = class Application {
   #app = express();
@@ -39,7 +42,7 @@ module.exports = class Application {
       swaggerUi.setup(
         swaggerJsDoc({
           swaggerDefinition: {
-            openapi:'3.0.0',
+            openapi: "3.0.0",
             info: {
               title: "Store Api Document",
               description: "This store Api document. ",
@@ -53,28 +56,29 @@ module.exports = class Application {
                 url: "http://localhost:4000",
               },
             ],
-            components : {
-              securitySchemes : {
-                BearerAuth : {
+            components: {
+              securitySchemes: {
+                BearerAuth: {
                   type: "http",
                   scheme: "bearer",
                   bearerFormat: "JWT",
-                  
-                }
-              }
+                },
+              },
             },
-            security : [{BearerAuth : [] }]
-            
+            security: [{ BearerAuth: [] }],
           },
 
-          apis: [ "./app/routes/**/*.js"],
+          apis: ["./app/routes/**/*.js"],
         }),
-        {explorer:true}
+        { explorer: true }
       )
     );
   }
   createServer() {
-    http.createServer(this.#app).listen(this.#PORT, () => {
+    const server = http.createServer(this.#app);
+    const io = initialSocket(server);
+    socketHandler(io);
+    server.listen(this.#PORT, () => {
       console.log(`run > http://localhost:${this.#PORT}`);
     });
   }
@@ -96,16 +100,16 @@ module.exports = class Application {
       process.exit(0);
     });
   }
-  Init_redis(){
-    require('./utils/init_redis');
+  Init_redis() {
+    require("./utils/init_redis");
   }
-  Init_TemplateEngine(){
-    this.#app.use(ExpressEjsLayouts)
+  Init_TemplateEngine() {
+    this.#app.use(ExpressEjsLayouts);
     this.#app.set("view engine", "ejs");
     this.#app.set("views", "resource/views");
     this.#app.set("layout extractStyles", true);
     this.#app.set("layout extractScripts", true);
-    this.#app.set('layout','./layouts/master')
+    this.#app.set("layout", "./layouts/master");
   }
 
   createRoutes() {
