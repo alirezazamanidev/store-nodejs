@@ -1,7 +1,8 @@
 const mongoose=require('mongoose');
 const messageSchema=new mongoose.Schema({
     sender:{type:mongoose.Types.ObjectId,ref:'user'},
-    dateTime:{type:String}
+    message:{type:String},
+    dateTime:{type:Number}
 })
 const RoomSchema=new mongoose.Schema({
     name:{type:String},
