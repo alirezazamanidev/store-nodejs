@@ -1,11 +1,13 @@
 const socket=io('http://localhost:3000');
+let namespaceSocket;
 function stringToHTML(str) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(str, "text/html");
     return doc.body.firstChild
 }
-;function initNamespaceConnection(endpoint){
-    const namespaceSocket=io(`http://localhost:3000/${endpoint}`);
+
+function initNamespaceConnection(endpoint){
+     namespaceSocket=io(`http://localhost:3000/${endpoint}`);
     namespaceSocket.on('connect',()=>{
         namespaceSocket.on('roomList',rooms=>{
             const roomsElement= document.querySelector('#contacts ul');
@@ -23,7 +25,21 @@ function stringToHTML(str) {
                 </li>`)
                 roomsElement.appendChild(html)  
             }
+            const roomNodes=document.querySelectorAll("ul li.contact");
+            for (const room of roomNodes) {
+                room.addEventListener('click',()=>{
+                    const roomName=room.getAttribute('roomName');
+                    getRoomInfo(roomName);
+                })
+            }
         })
+    })
+}
+function getRoomInfo(roomName){
+    namespaceSocket.emit('joinRoom',roomName);
+    namespaceSocket.on('roomInfo',roomInfo=>{
+     
+        document.querySelector('#roomName h3').innerHTML=roomInfo.description;
     })
 }
 socket.on('connect',()=>{
