@@ -7,9 +7,11 @@ function stringToHTML(str) {
 }
 
 function initNamespaceConnection(endpoint){
+    if(namespaceSocket) namespaceSocket.close();
      namespaceSocket=io(`http://localhost:3000/${endpoint}`);
     namespaceSocket.on('connect',()=>{
         namespaceSocket.on('roomList',rooms=>{
+          
             const roomsElement= document.querySelector('#contacts ul');
             roomsElement.innerHTML=''
             for (const room of rooms) {
@@ -37,11 +39,15 @@ function initNamespaceConnection(endpoint){
 }
 function getRoomInfo(roomName){
     namespaceSocket.emit('joinRoom',roomName);
+    namespaceSocket.off('roomInfo');
     namespaceSocket.on('roomInfo',roomInfo=>{
-     
         document.querySelector('#roomName h3').innerHTML=roomInfo.description;
+    });
+    namespaceSocket.on('countOfOnlineUsers',count=>{
+        document.getElementById('onlineCount').innerText=count;
     })
 }
+
 socket.on('connect',()=>{
     socket.on('namespacesList',(namespacesList)=>{
        const namespacesElemet=document.getElementById('namespaces');
