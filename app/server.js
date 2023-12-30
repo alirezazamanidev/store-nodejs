@@ -15,6 +15,7 @@ const { socketHandler } = require("./socket.io");
 const session=require('express-session');
 const cookieParser=require('cookie-parser');
 const { SECRET_COOKIE_KEY } = require("./utils/constans");
+const { clientHelper } = require("./utils/cliient");
 config();
 module.exports = class Application {
   #app = express();
@@ -113,6 +114,10 @@ module.exports = class Application {
     this.#app.set("layout extractStyles", true);
     this.#app.set("layout extractScripts", true);
     this.#app.set("layout", "./layouts/master");
+    this.#app.use((req,res,next)=>{
+      this.#app.locals=clientHelper(req,res);
+      next();
+    })
   }
   Init_Client_Seasion(){
 

@@ -2,6 +2,13 @@
     <div class="contact-profile">
         <img src="https://avatars.githubusercontent.com/u/101404857?v=4"
             alt="" />
+            <%if(req.user.first_name && req.user.last_name){%>
+                <p><%=req.user.first_name+" "+ req.user.last_name%></p>
+            <%}else if(req.user.username){%>
+                <p><%=req.user.username%></p>
+            <%}else{%>
+                <p><%=req.user.phone%></p>
+            <%}%>
         <input type="hidden" id="userID">
                     <div class="social-media">
                         <span id="onlinesCount"><strong>افراد آنلاین : </strong><span id="onlineCount">-</span></span>
