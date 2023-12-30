@@ -109,5 +109,7 @@ socket.on("connect", () => {
   });
   document
     .querySelector("button.submit")
-    .addEventListener("click", () => sendMessage());
+    .addEventListener("click", () => {
+        sendMessage();
+    });
 });

@@ -8,6 +8,7 @@ module.exports= {
         TEACHER : "TEACHER",
         SUPPLIER : "SUPPLIER"
     }),
+    SECRET_COOKIE_KEY:"DKGRKJGJJkfkgkgjriirigigigigiti8t8t7488ttlglogogh",
     PERMISSIONS : Object.freeze({
         USER : ["profile"],
         ADMIN : ["all"],

@@ -12,7 +12,9 @@ const ExpressEjsLayouts = require("express-ejs-layouts");
 const { config } = require("dotenv");
 const { initialSocket } = require("./utils/init_socket.io");
 const { socketHandler } = require("./socket.io");
-
+const session=require('express-session');
+const cookieParser=require('cookie-parser');
+const { SECRET_COOKIE_KEY } = require("./utils/constans");
 config();
 module.exports = class Application {
   #app = express();
@@ -111,9 +113,22 @@ module.exports = class Application {
     this.#app.set("layout extractScripts", true);
     this.#app.set("layout", "./layouts/master");
   }
+  Init_Client_Seasion(){
+
+    this.#app.use(cookieParser(SECRET_COOKIE_KEY));
+    this.#app.use(session({
+      secret:SECRET_COOKIE_KEY,
+      resave:true,
+      saveUninitialized:true,
+      cookie:{
+        secure:true
+      }
+    }))
+  }
 
   createRoutes() {
     this.#app.use(AllRoutes);
+    
   }
   errorHandling() {
     this.#app.use((req, res, next) => {

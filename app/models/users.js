@@ -26,6 +26,7 @@ const Schema=new mongoose.Schema({
     bills:{type:[],default:[]},
     diacount:{type:Number,default:0},
     birthDay:{type:String},
+    token:{type:String,default:''},
     Role:{type:String,default:'User'},
     courses:{type:[mongoose.Types.ObjectId],ref:'Course',default:[]},
     basket:{type:basketSchema}
