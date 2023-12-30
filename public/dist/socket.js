@@ -56,22 +56,24 @@ function sendMessage() {
   if (message.trim() === "") {
     return alert("Input massege can not Empty");
   }
+  const userId=document.getElementById('userID').value;
   namespaceSocket.emit("newMessage", {
     message,
+    sender:userId,
     roomName,
     endpoint
   });
-  namespaceSocket.on("confrimMessage", (data) => {
-    console.log(data);
+  socket.on("confrimMessage", (data) => {
+    const li = stringToHTML(
+        `<li class="${userId ===data.sender ? 'sent' :'replies'}">
+              <img src="https://avatars.githubusercontent.com/u/101404857?v=4"
+                  alt="" />
+              <p>${data.message}</p>
+          </li>`
+      );
+      document.querySelector(".messages ul").appendChild(li);
   });
-  const li = stringToHTML(
-    `<li class="sent">
-          <img src="https://avatars.githubusercontent.com/u/101404857?v=4"
-              alt="" />
-          <p>${message}</p>
-      </li>`
-  );
-  document.querySelector(".messages ul").appendChild(li);
+  
   document.getElementById("messageInput").value = "";
   const messagesElemet = document.querySelector("div.messages");
   messagesElemet.scrollTo(0, messagesElemet.scrollHeight);

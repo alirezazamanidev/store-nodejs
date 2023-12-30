@@ -59,17 +59,18 @@ module.exports = class NamespaceSocketHandeler {
 
    getNewMessage(socket) {
     socket.on("newMessage", async(data) => {
-      const {message,endpoint,roomName}=data;
+      const {message,endpoint,roomName,sender}=data;
       await ConverSationModel.updateOne({endpoint,'rooms.name':roomName},{
         $push:{
          'rooms.$.messages':{
-            sender:"65904cd1456cf57c3383f3db",
+            sender,
             message,
             dateTime:Date.now()
          }
         }
 
-      })
+      });
+      this.#io.emit('confrimMessage',data)
     });
   }
 };
