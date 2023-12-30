@@ -25,6 +25,7 @@ module.exports = class Application {
     this.#DB_URI = DB_URI;
     this.configApplication();
     this.Init_TemplateEngine();
+    this.Init_Client_Seasion();
     this.createServer();
     this.connectToMongoDb();
     this.createRoutes();
